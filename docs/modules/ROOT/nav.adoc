@@ -1,0 +1,4 @@
+.Getting started
+* xref:index.adoc[Overview]
+* xref:how-to-build.adoc[Build & serve this site]
+* xref:compatibility-legend.adoc[Compatibility legend]

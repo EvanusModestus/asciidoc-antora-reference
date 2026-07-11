@@ -1,0 +1,10 @@
+# tag::server[]
+server:
+  host: web01
+  port: 443
+# end::server[]
+# tag::db[]
+database:
+  host: db01
+  port: 5432
+# end::db[]

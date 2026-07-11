@@ -1,0 +1,22 @@
+{{!-- Top navbar for the AsciiDoc + Antora Reference.
+      Overrides the default UI's placeholder navigation (Home / Products / Services /
+      Download, all dead "#" links) with the site title and links to the upstream
+      AsciiDoc and Antora documentation. --}}
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="{{or site.url (or siteRootPath '/')}}">{{site.title}}</a>
+      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://docs.asciidoctor.org/asciidoc/latest/" target="_blank" rel="noopener">AsciiDoc docs</a>
+        <a class="navbar-item" href="https://docs.antora.org" target="_blank" rel="noopener">Antora docs</a>
+      </div>
+    </div>
+  </nav>
+</header>

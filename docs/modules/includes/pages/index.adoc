@@ -1,0 +1,153 @@
+= Includes & conditionals
+:description: Reuse content with include directives (partials, examples, tagged regions, line ranges, leveloffset, indent) and branch with ifdef, ifndef, and ifeval.
+:navtitle: Includes & conditionals
+:demo-flag:
+
+The `include::` directive and the `ifdef`/`ifndef`/`ifeval` conditionals are [.compat.b-both]#AsciiDoc + Antora#. What differs is the *target*: Antora requires an xref:antora:index.adoc[Antora resource ID] (`partial$`, `example$`, `page$`) rather than a filesystem path.
+
+[NOTE]
+====
+In the "`syntax`" boxes below, the directives are backslash-escaped (`\include::`, `\ifdef::`) so they display literally instead of executing. Remove the backslash in real content.
+====
+
+== Include a partial
+
+[.compat.b-both]#AsciiDoc + Antora# / target is [.compat.b-antora]#Antora only#
+
+Pull in a shared file from the `partial$` family. The block below is included live from [.path]_modules/includes/partials/snippet.adoc_.
+
+[source,asciidoc]
+----
+\include::partial$snippet.adoc[tag=greeting]
+----
+
+.Rendered result of the include
+====
+include::partial$snippet.adoc[tag=greeting]
+====
+
+== Tagged regions
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+Select named regions marked with `// tag::name[]` / `// end::name[]`. Use `tags=a;b` for several, or `tags=*` for all.
+
+[source,asciidoc]
+----
+\include::partial$snippet.adoc[tag=note]
+----
+
+.Rendered result
+====
+include::partial$snippet.adoc[tag=note]
+====
+
+== Include an example as a source block
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+Wrap the include in a source block to display a file verbatim. This pulls the `server` tag from [.path]_examples/config.yml_.
+
+[source,asciidoc]
+------
+[source,yaml]
+----
+\include::example$config.yml[tag=server]
+----
+------
+
+[source,yaml]
+----
+include::example$config.yml[tag=server]
+----
+
+== Line ranges
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+Select specific lines with `lines=`. Ranges and multiple selections are allowed (`lines=1..2;5`).
+
+[source,asciidoc]
+------
+[source,yaml]
+----
+\include::example$config.yml[lines=2..4]
+----
+------
+
+[source,yaml]
+----
+include::example$config.yml[lines=2..4]
+----
+
+== leveloffset
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+Shift the heading levels of included content so a standalone document can be embedded as a subsection.
+
+[source,asciidoc]
+----
+\include::partial$chapter.adoc[leveloffset=+1]
+----
+
+== indent
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+Normalize the indentation of included verbatim content with `indent=0` (or any value).
+
+[source,asciidoc]
+------
+[source,yaml]
+----
+\include::example$config.yml[tag=db,indent=0]
+----
+------
+
+[source,yaml]
+----
+include::example$config.yml[tag=db,indent=0]
+----
+
+== Conditional: ifdef / ifndef
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+Render content only when an attribute is (un)set. This page's header sets `:demo-flag:`, so the block below appears.
+
+[source,asciidoc]
+----
+\ifdef::demo-flag[]
+This line renders because `demo-flag` is set.
+\endif::[]
+
+\ifndef::production[]
+This line renders because `production` is *not* set.
+\endif::[]
+----
+
+ifdef::demo-flag[]
+This line renders because `demo-flag` is set.
+endif::[]
+
+ifndef::production[]
+This line renders because `production` is *not* set.
+endif::[]
+
+== Conditional: ifeval
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+Evaluate a comparison between values or attributes.
+
+[source,asciidoc]
+----
+\ifeval::[{release} >= 1]
+Release 1.0 or later.
+\endif::[]
+----
+
+ifeval::["{page-component-name}" == "reference"]
+This renders because the current component is `reference`.
+endif::[]

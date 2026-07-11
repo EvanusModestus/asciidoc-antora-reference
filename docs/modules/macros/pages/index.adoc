@@ -1,0 +1,164 @@
+= Macros & media
+:description: Links, autolinks, mailto, cross-references, block and inline images, SVG, video, audio, icons, footnotes, and the experimental UI macros.
+:navtitle: Macros & media
+
+Links, images, and UI macros. Cross-file references depend on Antora's resource IDs — see xref:antora:index.adoc[] — but the inline syntax shown here is standard AsciiDoc.
+
+== Autolinks
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+A bare URL is linked automatically.
+
+[source,asciidoc]
+----
+Visit https://antora.org for the docs.
+----
+
+Visit https://antora.org for the docs.
+
+== Link macro with text & options
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+Use `link:` (or a bare URL with a trailing bracket) to set the link text. Add `^` to open in a new tab, or `role`/`window` named attributes.
+
+[source,asciidoc]
+----
+https://asciidoctor.org[Asciidoctor^] opens in a new tab.
+link:https://antora.org[Antora home,role=green] uses a role.
+----
+
+https://asciidoctor.org[Asciidoctor^] opens in a new tab.
+link:https://antora.org[Antora home,role=green] uses a role.
+
+== Email links
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+[source,asciidoc]
+----
+Contact mailto:team@example.com[the team] or bare docs@example.com.
+----
+
+Contact mailto:team@example.com[the team] or bare docs@example.com.
+
+== In-page cross-reference
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+`<<id,text>>` links within the page. For other pages, components, or versions, use the Antora resource-ID form of `xref:` covered in xref:antora:index.adoc[cross-references].
+
+[source,asciidoc]
+----
+See the <<footnotes,footnotes>> section below.
+Jump to another page with xref:text:index.adoc[inline formatting].
+----
+
+See the <<footnotes,footnotes>> section below.
+Jump to another page with xref:text:index.adoc[inline formatting].
+
+== Block image
+
+[.compat.b-both]#AsciiDoc + Antora# — in Antora the target is an image resource ID resolved from the module's [.path]_images/_ family.
+
+`image::` (double colon) places a block image. Add alt text, `width`, `title`, a `link`, and alignment via a role.
+
+[source,asciidoc]
+----
+.A captioned sample graphic
+image::sample.svg[Sample graphic,240,role=left]
+----
+
+.A captioned sample graphic
+image::sample.svg[Sample graphic,240,role=left]
+
+== Inline image
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+`image:` (single colon) drops an image into a line of text — handy for badges or icons.
+
+[source,asciidoc]
+----
+Status image:sample.svg[status,80] shown inline with prose.
+----
+
+Status image:sample.svg[status,80] shown inline with prose.
+
+== Linked & sized image
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+[source,asciidoc]
+----
+image::sample.svg[Clickable,160,link=https://antora.org,window=_blank]
+----
+
+image::sample.svg[Clickable,160,link=https://antora.org,window=_blank]
+
+== Video
+
+[.compat.b-both]#AsciiDoc + Antora# (the `youtube` and `vimeo` targets embed a remote player; a bare path plays a self-hosted file)
+
+Syntax is shown rather than embedded live: an 11-character YouTube ID is high-entropy and can trip secret-scanners. Drop a real ID into `VIDEO_ID` locally to see the player.
+
+[source,asciidoc]
+----
+// Embed a hosted service by video id
+video::VIDEO_ID[youtube,640,360]
+
+// Or play a self-hosted file (module images/ or an attachment)
+video::clip.mp4[width=640,options="controls"]
+----
+
+== Audio
+
+[.compat.b-both]#AsciiDoc + Antora# (needs an audio file in the module's [.path]_images/_ or an attachment; syntax shown)
+
+[source,asciidoc]
+----
+audio::intro.mp3[options="autoplay,loop"]
+----
+
+== Inline icons
+
+[.compat.b-both]#AsciiDoc + Antora# (requires `:icons: font`; the default UI bundles Font Awesome)
+
+[source,asciidoc]
+----
+Save with icon:floppy-disk[] then icon:check[role=green] when done.
+----
+
+Save with icon:floppy-disk[] then icon:check[role=green] when done.
+
+== Keyboard, button & menu (UI macros)
+
+[.compat.b-both]#AsciiDoc + Antora# (requires `:experimental:`, set in this playbook)
+
+[source,asciidoc]
+----
+Press kbd:[Ctrl+S] to save, then click btn:[Build].
+Open menu:View[Appearance > Dark].
+----
+
+Press kbd:[Ctrl+S] to save, then click btn:[Build].
+Open menu:View[Appearance > Dark].
+
+[#footnotes]
+== Footnotes
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+`footnote:[text]` creates a numbered footnote. Give it an id to reuse the same note.
+
+[source,asciidoc]
+----
+AsciiDoc is a language.footnote:[Asciidoctor is its reference processor.]
+Antora is a pipeline.footnote:pipe[A generator that runs Asciidoctor.]
+And so is its build step.footnote:pipe[]
+----
+
+AsciiDoc is a language.footnote:[Asciidoctor is its reference processor.]
+Antora is a pipeline.footnote:pipe[A generator that runs Asciidoctor.]
+And so is its build step.footnote:pipe[]

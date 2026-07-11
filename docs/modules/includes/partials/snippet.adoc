@@ -1,0 +1,7 @@
+// tag::greeting[]
+Hello from a *reusable partial*. This paragraph lives in one file under [.path]_modules/includes/partials/_ and is pulled into the page at build time.
+// end::greeting[]
+
+// tag::note[]
+NOTE: Tagged regions let a single source file feed many pages without duplication.
+// end::note[]

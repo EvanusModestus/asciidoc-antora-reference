@@ -1,0 +1,130 @@
+= Attributes
+:description: Document and element attributes, references, booleans, custom values, counters, built-ins, and Antora's intrinsic page attributes.
+:navtitle: Attributes
+:project-name: AsciiDoc + Antora Reference
+:release: 1.0
+:url-repo: https://gitlab.com/antora/antora
+
+Attributes are AsciiDoc's variables. Most usage is [.compat.b-both]#AsciiDoc + Antora#; the `page-*` intrinsic attributes are [.compat.b-antora]#Antora only#.
+
+== Define & reference
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+Set an attribute in the header with `:name: value`, then reference it as `\{name}`. This page's header defines `project-name` and `release`.
+
+[source,asciidoc]
+----
+:project-name: AsciiDoc + Antora Reference
+:release: 1.0
+
+Welcome to {project-name} version {release}.
+----
+
+Welcome to {project-name} version {release}.
+
+== Attributes in URLs and macros
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+Attributes expand inside link targets, so you can centralize URLs in the header.
+
+[source,asciidoc]
+----
+:url-repo: https://gitlab.com/antora/antora
+
+Clone the {url-repo}[Antora repository^].
+----
+
+Clone the {url-repo}[Antora repository^].
+
+== Boolean / flag attributes
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+An attribute set with no value is a boolean flag; its presence toggles behavior (for example `:experimental:` enables UI macros). Test flags with the conditional directives in xref:includes:index.adoc[].
+
+[source,asciidoc]
+----
+:experimental:
+:sectanchors:
+----
+
+== Unset an attribute
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+Append `!` to the name to unset a built-in or previously set attribute.
+
+[source,asciidoc]
+----
+:!sectids:
+// or
+:sectids!:
+----
+
+== Escape a reference
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+Prefix with a backslash to print the braces literally.
+
+[source,asciidoc]
+----
+Type \{project-name} to reference the {project-name} attribute.
+----
+
+Type \{project-name} to reference the {project-name} attribute.
+
+== Counters
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+`{counter:name}` prints and increments an integer counter; `{counter:name:start}` seeds it. Great for numbering figures or steps inline.
+
+[source,asciidoc]
+----
+Step {counter:step}. Do this.
+Step {counter:step}. Then that.
+Step {counter:step}. Finally this.
+----
+
+Step {counter:step}. Do this.
+Step {counter:step}. Then that.
+Step {counter:step}. Finally this.
+
+== Built-in attributes
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+The processor sets many built-ins. A few useful ones:
+
+[source,asciidoc]
+----
+The document title is "{doctitle}".
+A non-breaking space{nbsp}joins these. A wj{wj}zero-width join.
+----
+
+The document title is "{doctitle}".
+A non-breaking space{nbsp}joins these. A wj{wj}zero-width join.
+
+== Intrinsic Antora page attributes
+
+[.compat.b-antora]#Antora only#
+
+Antora injects `page-*` attributes describing the current page's place in the site. They resolve to real values only in an Antora build (they are blank in a bare Asciidoctor run).
+
+[source,asciidoc]
+----
+Component: {page-component-name}
+Version:   {page-component-version}
+Module:    {page-module}
+Source:    {page-relative-src-path}
+----
+
+Component: {page-component-name}
+Version:   {page-component-version}
+Module:    {page-module}
+Source:    {page-relative-src-path}
+
+See xref:antora:index.adoc[] for `page-*` attributes you *set* to control page behavior (layout, aliases, roles, TOC levels).

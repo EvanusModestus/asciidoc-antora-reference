@@ -1,0 +1,2 @@
+.xref:index.adoc[Blocks]
+* xref:index.adoc[Every block type]

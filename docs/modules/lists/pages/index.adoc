@@ -1,0 +1,193 @@
+= Lists
+:description: Unordered, ordered, nested, description, Q&A, checklist, horizontal lists, numbering styles, and list-item continuation.
+:navtitle: Lists
+
+All list types are [.compat.b-both]#AsciiDoc + Antora#.
+
+== Unordered & nested
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+Lead with `*`. Add asterisks (or use `-`) to nest. Nesting depth is by marker count, not indentation.
+
+[source,asciidoc]
+----
+* Fruit
+** Apple
+** Pear
+*** Bartlett
+* Vegetables
+- also a valid top-level marker
+----
+
+* Fruit
+** Apple
+** Pear
+*** Bartlett
+* Vegetables
+- also a valid top-level marker
+
+== Ordered & numbering styles
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+Lead with `.`. Set a style (`loweralpha`, `upperroman`, …), a `start` value, or `%reversed`.
+
+[source,asciidoc]
+----
+. First
+. Second
+.. nested uses letters automatically
+.. second nested
+
+[loweralpha, start=3]
+. begins at c
+. then d
+
+[upperroman]
+. I
+. II
+----
+
+. First
+. Second
+.. nested uses letters automatically
+.. second nested
+
+[loweralpha, start=3]
+. begins at c
+. then d
+
+[upperroman]
+. I
+. II
+
+== Description list
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+A term followed by `::` and its description. Nest with `:::`.
+
+[source,asciidoc]
+----
+CPU:: Central processing unit.
+RAM:: Working memory.
+  Volatile:::  Lost on power off.
+  Non-volatile::: Persists.
+----
+
+CPU:: Central processing unit.
+RAM:: Working memory.
+  Volatile:::  Lost on power off.
+  Non-volatile::: Persists.
+
+== Question & answer list
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+The `[qanda]` style renders a description list as numbered Q&A.
+
+[source,asciidoc]
+----
+[qanda]
+What is AsciiDoc?::
+  A plain-text authoring language.
+What is Antora?::
+  A multi-repo documentation site generator.
+----
+
+[qanda]
+What is AsciiDoc?::
+  A plain-text authoring language.
+What is Antora?::
+  A multi-repo documentation site generator.
+
+== Checklist
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+An unordered list with `[x]` (checked) or `[ ]` (unchecked) markers.
+
+[source,asciidoc]
+----
+* [x] Write the source
+* [x] Build the site
+* [ ] Ship it
+----
+
+* [x] Write the source
+* [x] Build the site
+* [ ] Ship it
+
+== Horizontal (labeled) list
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+A description list rendered side by side with the `[horizontal]` style.
+
+[source,asciidoc]
+----
+[horizontal]
+Host:: web01
+Port:: 443
+----
+
+[horizontal]
+Host:: web01
+Port:: 443
+
+== List item continuation
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+A `+` on its own line attaches the following block to the current list item, so items can hold paragraphs, admonitions, or source blocks.
+
+[source,asciidoc]
+------
+. Run the build.
++
+[source,console]
+----
+$ npx antora antora-playbook.yml
+----
++
+NOTE: The output lands in `public/`.
+
+. Serve it.
+------
+
+. Run the build.
++
+[source,console]
+----
+$ npx antora antora-playbook.yml
+----
++
+NOTE: The output lands in `public/`.
+
+. Serve it.
+
+== Separating adjacent lists
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+Two lists back to back merge into one. A `//` line comment between them (or a different marker) keeps them apart.
+
+[source,asciidoc]
+----
+* apples
+* oranges
+
+//-
+
+* carrots
+* peas
+----
+
+* apples
+* oranges
+
+//-
+
+* carrots
+* peas

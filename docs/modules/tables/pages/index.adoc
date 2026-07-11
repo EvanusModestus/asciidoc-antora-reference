@@ -1,0 +1,278 @@
+= Tables
+:description: Basic tables, column specs, alignment, cell/column formatting, spanning, autowidth, widths, borders, striping, CSV/DSV, nested tables, and titles.
+:navtitle: Tables
+
+All table features here are [.compat.b-both]#AsciiDoc + Antora#.
+
+== Basic table with header
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+Delimit with `|===`. A row followed by a blank line becomes the header, or set `options=header`.
+
+[source,asciidoc]
+----
+[options="header"]
+|===
+| Name | Role | Location
+| web01 | Frontend | us-east
+| db01  | Database | us-west
+|===
+----
+
+[options="header"]
+|===
+| Name | Role | Location
+| web01 | Frontend | us-east
+| db01  | Database | us-west
+|===
+
+== Column widths & alignment
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+`cols` sets relative widths and per-column alignment: `<` left, `^` center, `>` right; prefix with `.` for vertical (`.^` middle).
+
+[source,asciidoc]
+----
+[cols="1,^2,>1",options="header"]
+|===
+| Left | Centered (2x wide) | Right
+| a | b | c
+| longer value | centered | 42
+|===
+----
+
+[cols="1,^2,>1",options="header"]
+|===
+| Left | Centered (2x wide) | Right
+| a | b | c
+| longer value | centered | 42
+|===
+
+== Column content styles
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+Append a style letter in `cols` to format a whole column: `m` monospace, `s` strong, `e` emphasis, `h` header, `l` literal, `a` full AsciiDoc.
+
+[source,asciidoc,subs=attributes+]
+----
+[cols="s,m,e",options="header"]
+|===
+| Strong column | Mono column | Emphasis column
+| web01 | {ip-doc} | primary
+|===
+----
+
+[cols="s,m,e",options="header"]
+|===
+| Strong column | Mono column | Emphasis column
+| web01 | {ip-doc} | primary
+|===
+
+== AsciiDoc cells (block content inside a cell)
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+Prefix a cell with `a` to process its content as full AsciiDoc — lists, admonitions, source blocks.
+
+[source,asciidoc]
+------
+|===
+| Plain cell | Rich cell
+
+| Just text
+a|
+* a list
+* inside a cell
+
+NOTE: and an admonition
+|===
+------
+
+|===
+| Plain cell | Rich cell
+
+| Just text
+a|
+* a list
+* inside a cell
+
+NOTE: and an admonition
+|===
+
+== Spanning cells
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+`n+|` spans _n_ columns, `.n+|` spans _n_ rows, `n.m+|` spans both.
+
+[source,asciidoc]
+----
+[cols="3*",options="header"]
+|===
+| A | B | C
+2+| Spans two columns | third
+.2+| Spans two rows | x | y
+| x2 | y2
+|===
+----
+
+[cols="3*",options="header"]
+|===
+| A | B | C
+2+| Spans two columns | third
+.2+| Spans two rows | x | y
+| x2 | y2
+|===
+
+== Autowidth, width, and title
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+`%autowidth` shrinks columns to content; `width=` sets the table width; a `.Title` line above captions it.
+
+[source,asciidoc]
+----
+.Small autowidth table
+[%autowidth]
+|===
+| Key | Value
+| ttl | 300
+|===
+----
+
+.Small autowidth table
+[%autowidth]
+|===
+| Key | Value
+| ttl | 300
+|===
+
+== Borders: frame & grid
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+`frame` controls the outer border (`all`, `ends`, `sides`, `none`); `grid` controls inner lines (`all`, `rows`, `cols`, `none`).
+
+[source,asciidoc]
+----
+[frame=ends,grid=rows]
+|===
+| only top/bottom frame | horizontal grid only
+| a | b
+|===
+----
+
+[frame=ends,grid=rows]
+|===
+| only top/bottom frame | horizontal grid only
+| a | b
+|===
+
+== Striping
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+`stripes` shades alternating rows (`odd`, `even`, `all`, `none`).
+
+[source,asciidoc]
+----
+[stripes=even,options="header"]
+|===
+| n | squared
+| 1 | 1
+| 2 | 4
+| 3 | 9
+|===
+----
+
+[stripes=even,options="header"]
+|===
+| n | squared
+| 1 | 1
+| 2 | 4
+| 3 | 9
+|===
+
+== Footer row
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+Add `footer` to `options` to render the last row as a footer.
+
+[source,asciidoc]
+----
+[options="header,footer"]
+|===
+| Item | Cost
+| Widget | 10
+| Gadget | 15
+| Total | 25
+|===
+----
+
+[options="header,footer"]
+|===
+| Item | Cost
+| Widget | 10
+| Gadget | 15
+| Total | 25
+|===
+
+== CSV and DSV data
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+`format=csv` (or the `%csv` shorthand) parses comma-separated data; `format=dsv` uses a custom separator.
+
+[source,asciidoc]
+----
+[%header,format=csv]
+|===
+Name,Role,Region
+web01,frontend,us-east
+db01,database,us-west
+|===
+----
+
+[%header,format=csv]
+|===
+Name,Role,Region
+web01,frontend,us-east
+db01,database,us-west
+|===
+
+== Nested table
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+Inside an `a` (AsciiDoc) cell, use `!` in place of `|` to nest a table.
+
+[source,asciidoc]
+------
+|===
+| Outer | Nested
+
+| left
+a|
+[cols="2*"]
+!===
+! inner a ! inner b
+! 1 ! 2
+!===
+|===
+------
+
+|===
+| Outer | Nested
+
+| left
+a|
+[cols="2*"]
+!===
+! inner a ! inner b
+! 1 ! 2
+!===
+|===

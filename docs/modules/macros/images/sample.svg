@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="140" viewBox="0 0 320 140" role="img" aria-label="Sample reference graphic">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1c56b0"/>
+      <stop offset="1" stop-color="#1a7f43"/>
+    </linearGradient>
+  </defs>
+  <rect x="1" y="1" width="318" height="138" rx="12" fill="url(#g)"/>
+  <circle cx="70" cy="70" r="34" fill="#fdeede" opacity="0.9"/>
+  <text x="160" y="66" font-family="Helvetica, Arial, sans-serif" font-size="22" fill="#ffffff" font-weight="700">Sample SVG</text>
+  <text x="160" y="94" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#e7f5ec">rendered by Antora</text>
+</svg>

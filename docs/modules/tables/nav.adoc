@@ -1,0 +1,2 @@
+.xref:index.adoc[Tables]
+* xref:index.adoc[Every table feature]

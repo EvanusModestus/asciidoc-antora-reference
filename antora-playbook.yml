@@ -1,0 +1,40 @@
+# Antora playbook for the AsciiDoc + Antora Reference site.
+#
+# Build:   npx antora --fetch antora-playbook.yml
+# Serve:   npx http-server public -c-1   (or any static server)
+#
+# HEAD is read from the git worktree, so uncommitted edits are picked up on
+# rebuild. The directory must be inside a git repository with at least one
+# commit (run `git init && git add -A && git commit -m init` once).
+site:
+  title: AsciiDoc + Antora Reference
+  start_page: reference::index.adoc
+  robots: disallow
+content:
+  sources:
+  - url: .
+    start_path: docs
+    branches: HEAD
+asciidoc:
+  attributes:
+    # Enables the kbd:[], btn:[], and menu:[] UI macros.
+    experimental: ''
+    # The Antora default UI bundles highlight.js for source blocks.
+    source-highlighter: highlight.js
+    # Font-based admonition and inline icons.
+    icons: font
+    # Handy in-page attributes used across the reference.
+    tabs: ''
+    url-asciidoc-docs: https://docs.asciidoctor.org/asciidoc/latest
+    url-antora-docs: https://docs.antora.org
+    # RFC5737 documentation IP — never a real/internal address in shareable source.
+    ip-doc: 192.0.2.1
+ui:
+  bundle:
+    url: https://gitlab.com/antora/antora-ui-default/-/jobs/artifacts/master/raw/build/ui-bundle.zip?job=bundle-stable
+    snapshot: true
+  supplemental_files: ./supplemental-ui
+output:
+  dir: ./public
+  # Wipe the output dir each build so renamed/removed pages leave no stale artifacts.
+  clean: true

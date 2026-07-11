@@ -1,0 +1,56 @@
+= Compatibility legend
+:description: What the three badges mean, and the specific features that behave differently in Asciidoctor versus Antora.
+:navtitle: Compatibility legend
+
+AsciiDoc is the *language*. Asciidoctor is the reference *processor*. Antora is a *pipeline* that runs Asciidoctor over many repositories and adds a resource-resolution layer on top. Most syntax is identical across all three; a few things differ. The badges make the difference explicit.
+
+== The badges
+
+[.compat.b-both]#AsciiDoc + Antora#::
+Core language syntax. Identical result whether you run `asciidoctor file.adoc` or build with Antora. The vast majority of this reference.
+
+[.compat.b-adoc]#AsciiDoc only#::
+Valid AsciiDoc that Antora deliberately changes or restricts. It still works in a standalone Asciidoctor run, but in Antora you should use the Antora-native equivalent. See the differences below.
+
+[.compat.b-antora]#Antora only#::
+Behavior contributed by the Antora pipeline, not the language. Resource IDs, cross-component references, page attributes, and navigation files are meaningless to bare Asciidoctor.
+
+== Features that differ between the two tools
+
+[cols="1,2a,2a",options="header"]
+|===
+| Feature | Standalone Asciidoctor | Antora
+
+| Cross-references (`xref:`)
+| Targets a file path or an ID in the same document.
+| Targets an *Antora resource ID* (`version@component:module:page.adoc#fragment`). Antora resolves it to the correct published URL. See xref:antora:index.adoc[].
+
+| `include::[]` targets
+| Any local filesystem path or URI.
+| An Antora resource ID from the `partial$`, `example$`, or `page$` family. Raw filesystem paths are rejected. See xref:includes:index.adoc[].
+
+| Images / `image::[]`
+| Resolved against `imagesdir`.
+| Resolved as an image resource ID; Antora publishes and rewrites the URL. See xref:macros:index.adoc[].
+
+| Table of contents
+| `:toc:` / `toc::[]` render an in-document TOC.
+| Suppressed — the UI supplies a page TOC from `:page-toclevels:`. Don't set `:toc:` in a page.
+
+| Document title as page heading
+| First `=` title becomes the doc title.
+| Same, but the *navigation* comes from `nav.adoc` files, not from the section tree. See xref:antora:index.adoc[].
+
+| `docinfo`, custom stylesheets, `:stylesheet:`
+| Honored by Asciidoctor's HTML backend.
+| Ignored — presentation comes from the Antora UI bundle, not per-document.
+
+| Multi-part books, `:doctype: book`
+| Fully supported as one big document.
+| Antora publishes one page per file; book-scale features (parts, colophon) are for single-file Asciidoctor output.
+|===
+
+== Rule of thumb
+
+* Writing content that must render in *both* a standalone Asciidoctor build and an Antora site? Stick to [.compat.b-both]#AsciiDoc + Antora# features.
+* Building a documentation *site*? Prefer the [.compat.b-antora]#Antora only# resource-ID mechanisms for every cross-file reference — they survive moves, version bumps, and URL strategy changes.

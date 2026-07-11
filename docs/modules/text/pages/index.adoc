@@ -1,0 +1,197 @@
+= Inline text formatting
+:description: Bold, italic, monospace, highlight, super/subscript, curved quotes, special characters, replacements, custom roles, and line breaks — each shown live.
+:navtitle: Inline formatting
+
+Everything on this page is [.compat.b-both]#AsciiDoc + Antora# unless a section says otherwise. The gray box is the source; the block under it is the rendered result.
+
+== Bold
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+Single asterisks are *constrained* (bounded by word boundaries). Double asterisks are *unconstrained* and work in the middle of a word.
+
+[source,asciidoc]
+----
+*bold* text, and un**bold**able mid-word emphasis.
+----
+
+*bold* text, and un**bold**able mid-word emphasis.
+
+== Italic
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+[source,asciidoc]
+----
+_italic_ text, and it__alic__ inside a word.
+----
+
+_italic_ text, and it__alic__ inside a word.
+
+== Bold + italic
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+Nest the markers. Order does not matter, but keep constrained/unconstrained consistent.
+
+[source,asciidoc]
+----
+*_bold italic_* and _*also bold italic*_ and *__mid__*word.
+----
+
+*_bold italic_* and _*also bold italic*_ and *__mid__*word.
+
+== Monospace
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+Backticks produce monospace. Combine with bold/italic markers.
+
+[source,asciidoc]
+----
+Call `render()`, a `*bold mono*`, and a `_mono italic_` name.
+----
+
+Call `render()`, a `*bold mono*`, and a `_mono italic_` name.
+
+== Literal monospace (no substitutions)
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+Wrap the backticked text in plus signs to make it a literal passthrough — nothing inside is interpreted.
+
+[source,asciidoc]
+----
+The syntax `+*not bold*+` stays literal, including the `+{attribute}+` braces.
+----
+
+The syntax `+*not bold*+` stays literal, including the `+{attribute}+` braces.
+
+== Highlight / mark
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+Double hash marks text (renders as `<mark>`). A single hash with a role applies a custom color/style.
+
+[source,asciidoc]
+----
+Please #highlight this# and [.underline]#underline this# and [.line-through]#strike this#.
+----
+
+Please #highlight this# and [.underline]#underline this# and [.line-through]#strike this#.
+
+== Superscript & subscript
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+[source,asciidoc]
+----
+E = mc^2^ and the H~2~O molecule.
+----
+
+E = mc^2^ and the H~2~O molecule.
+
+== Custom inline roles
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+`[.role]#text#` wraps the text in a `<span class="role">`. Style the class in your UI. The badges on this very page use this mechanism.
+
+[source,asciidoc]
+----
+A [.compat.b-both]#custom badge# built from two roles.
+----
+
+A [.compat.b-both]#custom badge# built from two roles.
+
+== Built-in text-span roles
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+The default UI ships styles for a few roles out of the box.
+
+[source,asciidoc]
+----
+[.big]#big# / [.small]#small# / [.underline]#underline# / [.line-through]#deleted#
+----
+
+[.big]#big# / [.small]#small# / [.underline]#underline# / [.line-through]#deleted#
+
+== Curved quotes & apostrophes
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+Backtick-plus-quote pairs produce typographic curly quotes; backtick-apostrophe produces a curly apostrophe.
+
+[source,asciidoc]
+----
+"`double curved quotes`" and '`single curved quotes`' plus Sam's contraction.
+----
+
+"`double curved quotes`" and '`single curved quotes`' plus Sam's contraction.
+
+== Character replacements
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+The `replacements` substitution turns text shorthands into symbols.
+
+[source,asciidoc]
+----
+(C) 2026, (R), and (TM). An arrow -> and back <-, plus => and <=.
+An em dash -- like this. And an ellipsis...
+----
+
+(C) 2026, (R), and (TM). An arrow -> and back <-, plus => and <=.
+An em dash -- like this. And an ellipsis...
+
+== Special characters
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+`<`, `>`, and `&` are escaped automatically so they are safe in prose. You can also enter any character reference.
+
+[source,asciidoc]
+----
+In HTML, 1 < 2 && 3 > 2. The &sect; symbol and &#182; via references.
+----
+
+In HTML, 1 < 2 && 3 > 2. The &sect; symbol and &#182; via references.
+
+== Line breaks
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+End a line with a space and a `+` to force a hard break. Or set `+hardbreaks+` on a block (or `:hardbreaks-option:` in the header) to preserve every newline.
+
+[source,asciidoc]
+----
+Roses are red, +
+violets are blue.
+
+[%hardbreaks]
+Every
+newline
+is kept.
+----
+
+Roses are red, +
+violets are blue.
+
+[%hardbreaks]
+Every
+newline
+is kept.
+
+== Prevent substitutions inline
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+Use the triple-plus or single-plus passthrough, or a backslash escape, to stop AsciiDoc from interpreting a token.
+
+[source,asciidoc]
+----
+Show a literal +++<tag>+++, an escaped \*asterisk*, and a literal \{attribute}.
+----
+
+Show a literal +++<tag>+++, an escaped \*asterisk*, and a literal \{attribute}.

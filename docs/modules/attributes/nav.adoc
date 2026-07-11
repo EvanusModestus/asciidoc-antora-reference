@@ -1,0 +1,2 @@
+.xref:index.adoc[Attributes]
+* xref:index.adoc[Document & element attributes]

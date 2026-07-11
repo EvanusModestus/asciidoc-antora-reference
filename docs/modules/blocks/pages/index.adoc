@@ -1,0 +1,334 @@
+= Blocks
+:description: Every AsciiDoc block type — paragraphs, admonitions, listing/source, literal, quote, verse, sidebar, example, collapsible, open, passthrough — with titles, roles, and breaks.
+:navtitle: Blocks
+
+All blocks here are [.compat.b-both]#AsciiDoc + Antora# unless noted. When a "`syntax`" box needs to show a block that itself uses `----`, the outer box uses a longer delimiter so the example renders verbatim.
+
+== Normal & literal paragraphs
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+A blank line separates paragraphs. Indent a line to make it a *literal* paragraph (monospace, no substitutions).
+
+[source,asciidoc]
+----
+A normal paragraph flows and wraps.
+
+ An indented line becomes a literal
+ paragraph, preserving   spacing.
+----
+
+A normal paragraph flows and wraps.
+
+ An indented line becomes a literal
+ paragraph, preserving   spacing.
+
+== Block title
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+A line starting with `.` immediately above a block gives it a caption.
+
+[source,asciidoc]
+----
+.Ingredients
+* Flour
+* Water
+----
+
+.Ingredients
+* Flour
+* Water
+
+== Admonitions
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+Five labels: NOTE, TIP, IMPORTANT, CAUTION, WARNING. Inline form for a single paragraph.
+
+[source,asciidoc]
+----
+NOTE: This is a single-paragraph note.
+
+TIP: Icons come from `:icons: font`.
+----
+
+NOTE: This is a single-paragraph note.
+
+TIP: Icons come from `:icons: font`.
+
+For rich content, set the label on an example block (masquerading):
+
+[source,asciidoc]
+------
+[WARNING]
+====
+An admonition can hold *anything*:
+
+* lists
+* source blocks
+* nested blocks
+====
+------
+
+[WARNING]
+====
+An admonition can hold *anything*:
+
+* lists
+* source blocks
+* nested blocks
+====
+
+== Listing block
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+Verbatim text, no substitutions, delimited by four hyphens.
+
+[source,asciidoc]
+------
+----
+$ ls -la
+total 0   *not bold*   {not-an-attribute}
+----
+------
+
+----
+$ ls -la
+total 0   *not bold*   {not-an-attribute}
+----
+
+== Source block with syntax highlighting & callouts
+
+[.compat.b-both]#AsciiDoc + Antora# (highlighting depends on a `source-highlighter`; Antora's default UI bundles highlight.js)
+
+[source,asciidoc]
+------
+[source,ruby]
+----
+require 'sinatra' <1>
+
+get '/hi' do <2>
+  "Hello World!" <3>
+end
+----
+<1> Load the library.
+<2> Define a route.
+<3> Return the response.
+------
+
+[source,ruby]
+----
+require 'sinatra' <1>
+
+get '/hi' do <2>
+  "Hello World!" <3>
+end
+----
+<1> Load the library.
+<2> Define a route.
+<3> Return the response.
+
+== Literal block
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+Like a listing block but styled as literal output; delimited by four dots.
+
+[source,asciidoc]
+----
+....
+Verbatim, monospace, no highlighting.
+    Whitespace is preserved.
+....
+----
+
+....
+Verbatim, monospace, no highlighting.
+    Whitespace is preserved.
+....
+
+== Quote block
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+Delimited by four underscores. The attribute list carries the attribution and citation.
+
+[source,asciidoc]
+----
+[quote,Albert Einstein,On the Method of Theoretical Physics]
+____
+Everything should be made as simple as possible, but not simpler.
+____
+----
+
+[quote,Albert Einstein,On the Method of Theoretical Physics]
+____
+Everything should be made as simple as possible, but not simpler.
+____
+
+A single-line quote can use the shorthand:
+
+[source,asciidoc]
+----
+[,Confucius]
+"`It does not matter how slowly you go as long as you do not stop.`"
+----
+
+[,Confucius]
+"`It does not matter how slowly you go as long as you do not stop.`"
+
+== Verse block
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+Preserves line breaks and indentation; ideal for poetry or addresses.
+
+[source,asciidoc]
+----
+[verse,Carl Sandburg,Fog]
+____
+The fog comes
+on little cat feet.
+____
+----
+
+[verse,Carl Sandburg,Fog]
+____
+The fog comes
+on little cat feet.
+____
+
+== Sidebar
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+Tangential content, delimited by four asterisks.
+
+[source,asciidoc]
+----
+.Did you know?
+****
+Sidebars float alongside the main flow and can contain any block content.
+****
+----
+
+.Did you know?
+****
+Sidebars float alongside the main flow and can contain any block content.
+****
+
+== Example block
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+Delimited by four equals signs; captioned "Example" by default.
+
+[source,asciidoc]
+------
+.A worked example
+====
+Wrap any content to set it apart as a demonstration.
+====
+------
+
+.A worked example
+====
+Wrap any content to set it apart as a demonstration.
+====
+
+== Collapsible block
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+Add the `%collapsible` option to an example block to render a native HTML `<details>` disclosure.
+
+[source,asciidoc]
+------
+.Click to expand
+[%collapsible]
+====
+Hidden until the reader opens it. Great for solutions, long output, or spoilers.
+====
+------
+
+.Click to expand
+[%collapsible]
+====
+Hidden until the reader opens it. Great for solutions, long output, or spoilers.
+====
+
+== Open block
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+A style-less container delimited by two hyphens. Apply any block style to it, or use it to attach multiple blocks to a list item.
+
+[source,asciidoc]
+----
+--
+An open block groups content.
+It can hold multiple paragraphs.
+--
+----
+
+--
+An open block groups content.
+It can hold multiple paragraphs.
+--
+
+== Passthrough block
+
+[.compat.b-adoc]#AsciiDoc only#
+
+Emits its content directly to the output with no processing. Useful for raw HTML in standalone Asciidoctor; in Antora, raw HTML bypasses the UI and can break the layout, so prefer native blocks.
+
+[source,asciidoc]
+------
+++++
+<div class="raw-html-demo">Raw HTML passed straight through.</div>
+++++
+------
+
+++++
+<div class="raw-html-demo">Raw HTML passed straight through.</div>
+++++
+
+== Block roles & IDs
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+`[.role]` adds a CSS class; `[#id]` sets an anchor you can link to. Combine them in one attribute list.
+
+[source,asciidoc]
+----
+[#tip-box.rolename]
+NOTE: This admonition has both an id and a role.
+----
+
+[#tip-box.rolename]
+NOTE: This admonition has both an id and a role.
+
+== Thematic break & page break
+
+[.compat.b-both]#AsciiDoc + Antora# (page break affects paginated output such as PDF; harmless in HTML)
+
+[source,asciidoc]
+----
+Above the line.
+
+'''
+
+Below the line.
+
+<<<
+----
+
+Above the line.
+
+'''
+
+Below the line.
+
+<<<

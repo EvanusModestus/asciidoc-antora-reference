@@ -1,0 +1,82 @@
+= AsciiDoc + Antora Reference
+:toc: macro
+:url-antora: https://antora.org
+
+A single, browsable Antora site that demonstrates *every AsciiDoc and Antora feature* — each shown as copyable source next to its live-rendered result. Built to be shared with colleagues as an a-la-carte reference and menu.
+
+Every example is real: the source shown on each page is the exact AsciiDoc that produced the rendered block beside it.
+
+toc::[]
+
+== What's inside
+
+Ten modules, each a grouped category page with per-feature compatibility badges:
+
+[cols="1,3",options="header"]
+|===
+| Module | Covers
+| `ROOT` | Overview, build instructions, compatibility legend
+| `text` | Inline formatting: bold, italic, monospace, highlight, super/subscript, roles, quotes, special characters, line breaks
+| `blocks` | Admonitions, listing/source, literal, quote, verse, sidebar, example, collapsible, open, passthrough, titles, breaks
+| `lists` | Unordered, ordered, nested, description, Q&A, checklist, horizontal, continuation
+| `sections` | Levels, auto/custom IDs, numbering, discrete headings, anchors, book special sections
+| `tables` | Columns, spans, alignment, cell/column formatting, CSV/DSV, nested, striping, borders, widths
+| `macros` | Links, xrefs, images, SVG, video, audio, icons, footnotes, UI macros
+| `attributes` | Document/element attributes, booleans, counters, built-ins, intrinsic `page-*` attributes
+| `includes` | Include partials/examples, tagged regions, line ranges, leveloffset, indent, conditionals
+| `antora` | Resource IDs, cross-component xrefs, page attributes, navigation, aliases, attachments, start pages
+|===
+
+== Compatibility badges
+
+Each feature is tagged so readers know where it works:
+
+* *AsciiDoc + Antora* — core syntax, identical in a standalone Asciidoctor run and an Antora build.
+* *AsciiDoc only* — valid AsciiDoc that Antora changes or restricts (for example, filesystem includes).
+* *Antora only* — provided by the Antora pipeline, not the language (resource IDs, page attributes, nav).
+
+== Build & serve
+
+Requires Node.js 16+ and network access on the first build (fetches the Antora default UI).
+
+[source,console]
+----
+# one-time: Antora reads content from git
+$ git init && git add -A && git commit -m "Initial reference site"
+
+# build
+$ npx antora --fetch antora-playbook.yml
+
+# serve (xrefs need HTTP; don't open public/index.html from disk)
+$ npx http-server public -c-1 -o
+----
+
+Or use the npm scripts: `npm install` then `npm run build` and `npm run serve`.
+
+Or, if you have `make`: run `make` for the target list, then `make build` and `make serve` — they wrap the same `npx` commands, so no `npm install` is required.
+
+== Layout
+
+[source]
+----
+asciidoc-antora-reference/
+├── antora-playbook.yml          # build configuration
+├── package.json                 # pinned Antora + serve scripts
+├── supplemental-ui/             # injects badge/role CSS into the UI
+│   └── partials/head-meta.hbs
+└── docs/
+    ├── antora.yml               # component descriptor + nav registration
+    └── modules/
+        ├── ROOT/                # overview, build, legend
+        ├── text/ blocks/ lists/ sections/ tables/
+        ├── macros/  (+ images/sample.svg)
+        ├── attributes/
+        ├── includes/  (+ partials/, examples/)
+        └── antora/
+----
+
+See {url-antora}[antora.org] for the pipeline docs.
+
+== License
+
+Released under the link:LICENSE[MIT License]. Copy, adapt, and reuse the examples freely — attribution is appreciated but not required.

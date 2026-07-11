@@ -1,0 +1,115 @@
+= Sections & headings
+:description: Section levels, automatic and custom IDs, section numbering, discrete headings, in-page anchors, and book special sections.
+:navtitle: Sections & headings
+
+In Antora the first `=` line is the *page title* (level 0); content sections start at `==`. The rendered headings on this very page are the live demonstration.
+
+== Section levels
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+One to five `=` after the title set levels 1–5. This page's own `==` and `===` headings are examples.
+
+[source,asciidoc]
+----
+== Level 1 section
+=== Level 2 section
+==== Level 3 section
+----
+
+=== A live level-2 heading
+
+==== A live level-3 heading
+
+== Automatic IDs
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+Every section gets a generated ID from its title (lowercased, spaces to hyphens). This section's ID is `automatic-ids`, so it can be linked without any extra markup.
+
+[source,asciidoc]
+----
+See the <<automatic-ids>> section.
+----
+
+See the <<automatic-ids>> section.
+
+== Custom IDs
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+Override the generated ID by placing `[#your-id]` on the line above the heading.
+
+[source,asciidoc]
+----
+[#stable-anchor]
+=== A heading with a pinned id
+
+Link to it with <<stable-anchor,this text>>.
+----
+
+[#stable-anchor]
+=== A heading with a pinned id
+
+Link to it with <<stable-anchor,this text>>.
+
+== Section numbering
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+Set `:sectnums:` in the page header to auto-number sections. Add `:sectnumlevels:` to control depth. (Not enabled on this page so the anchors above stay clean.)
+
+[source,asciidoc]
+----
+:sectnums:
+:sectnumlevels: 3
+
+== This becomes 1.
+=== This becomes 1.1.
+----
+
+== Discrete (floating) heading
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+A heading that is styled like a section title but is *not* part of the section tree — it produces no TOC entry and no auto-numbering.
+
+[source,asciidoc]
+----
+[discrete]
+=== A standalone heading
+----
+
+[discrete]
+=== A standalone heading
+
+== Link to a section
+
+[.compat.b-both]#AsciiDoc + Antora#
+
+Use the in-page xref shorthand `<<id>>` with optional link text. Across files, use the resource-ID form — see xref:antora:index.adoc[].
+
+[source,asciidoc]
+----
+Jump to <<custom-ids>> or to <<custom-ids,custom section IDs>>.
+----
+
+Jump to <<custom-ids>> or to <<custom-ids,custom section IDs>>.
+
+== Book special sections
+
+[.compat.b-adoc]#AsciiDoc only#
+
+With `:doctype: book`, styles like `[appendix]`, `[glossary]`, `[bibliography]`, `[preface]`, and `[colophon]` produce specially labeled and numbered sections. These target single-file book output; Antora publishes one page per file, so they are rarely used in a site.
+
+[source,asciidoc]
+----
+[appendix]
+== Reference tables
+
+[glossary]
+== Glossary
+
+[bibliography]
+== References
+----

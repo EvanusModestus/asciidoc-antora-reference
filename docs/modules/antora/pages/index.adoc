@@ -1,0 +1,158 @@
+= Antora pipeline features
+:description: Resource IDs and coordinates, cross-component xrefs, resource families, page attributes, navigation files, page aliases, attachments, and start pages.
+:navtitle: Antora pipeline features
+:reftext: Antora pipeline features
+:page-aliases: pipeline-features.adoc, antora-only.adoc
+
+Everything here is [.compat.b-antora]#Antora only# — it is contributed by the Antora build pipeline, not the AsciiDoc language. In a bare Asciidoctor run these do nothing.
+
+== Component / version / module structure
+
+[.compat.b-antora]#Antora only#
+
+An Antora site is assembled from *components*. Each component version is one [.path]_antora.yml_ descriptor plus a [.path]_modules/_ tree. This reference is the `reference` component; each menu category is a *module*.
+
+[source,yaml]
+----
+# docs/antora.yml
+name: reference
+title: AsciiDoc + Antora Reference
+version: ~            # versionless component
+nav:
+- modules/ROOT/nav.adoc
+- modules/text/nav.adoc
+----
+
+Inside a module, source files live in *family* directories: [.path]_pages/_, [.path]_partials/_, [.path]_examples/_, [.path]_images/_, and [.path]_attachments/_.
+
+== Resource IDs & coordinates
+
+[.compat.b-antora]#Antora only#
+
+Antora references every file by a *resource ID*, not a filesystem path. The full coordinate sequence is:
+
+[source]
+----
+version@component:module:family$relative/path.ext#fragment
+----
+
+You only specify the parts that differ from the current page — everything to the left is inherited. That is why an xref to a sibling page can be just `\xref:other.adoc[]`.
+
+[cols="1,3",options="header"]
+|===
+| Coordinate | When you need it
+| `version@` | Targeting a different component version
+| `component:` | Targeting a different component
+| `module:` | Targeting a different module (use `ROOT:` for the root module)
+| `family$` | For non-page families: `partial$`, `example$`, `image$`, `attachment$`
+| `#fragment` | Linking to a section or block ID within the target
+|===
+
+== Cross-references with xref
+
+[.compat.b-antora]#Antora only#
+
+The links below are *live* — they resolve to the correct published URLs regardless of deployment path.
+
+[source,asciidoc]
+----
+Same module:      xref:index.adoc[]
+Another module:   xref:tables:index.adoc[Tables]
+With a fragment:  xref:macros:index.adoc#footnotes[Footnotes]
+Root module:      xref:ROOT:compatibility-legend.adoc[Legend]
+----
+
+Same module: xref:index.adoc[this page] +
+Another module: xref:tables:index.adoc[Tables] +
+With a fragment: xref:macros:index.adoc#footnotes[Footnotes] +
+Root module: xref:ROOT:compatibility-legend.adoc[Legend]
+
+Cross-*component* and cross-*version* references add the leading coordinates. These are syntax-only here (this site has one versionless component):
+
+[source,asciidoc]
+----
+Other component:  xref:other-comp::module:page.adoc[]
+Other version:    xref:2.0@other-comp:ROOT:page.adoc[]
+----
+
+== Referencing other families
+
+[.compat.b-antora]#Antora only#
+
+The same coordinate system feeds includes and images. See the live examples in xref:includes:index.adoc[] (`partial$`, `example$`) and xref:macros:index.adoc[] (`image$`).
+
+[source,asciidoc]
+----
+\include::partial$snippet.adoc[]
+\include::example$config.yml[tag=server]
+image::image$diagram.svg[]
+----
+
+== Page attributes you set
+
+[.compat.b-antora]#Antora only#
+
+Attributes prefixed `page-` in a page header control how Antora publishes it. Common ones:
+
+[cols="1,3",options="header"]
+|===
+| Attribute | Effect
+| `page-aliases` | Publish redirect stubs from old URLs to this page
+| `page-layout` | Use a non-default UI layout template
+| `page-role` | Add a class to the page body for custom styling
+| `page-toclevels` | Depth of the auto-generated page TOC (`1`–`5`)
+| `reftext` | Default link text when an xref omits its own text
+| `navtitle` | Text shown for this page in the navigation menu
+|===
+
+This page's header sets `reftext` and `page-aliases`:
+
+[source,asciidoc]
+----
+:reftext: Antora pipeline features
+:page-aliases: pipeline-features.adoc, antora-only.adoc
+----
+
+Because of `reftext`, an xref that omits text — `xref:antora:index.adoc[]` — renders as "Antora pipeline features". Because of `page-aliases`, the URLs [.path]_antora/pipeline-features.html_ and [.path]_antora/antora-only.html_ redirect here after a build.
+
+== Navigation files
+
+[.compat.b-antora]#Antora only#
+
+The left sidebar is built from `nav.adoc` files registered in [.path]_antora.yml_, *not* from the section tree. A nav file is an unordered list of xrefs; a component can register several nav files, each becoming its own list.
+
+[source,asciidoc]
+----
+.xref:index.adoc[Antora pipeline features]
+* xref:index.adoc[Resource IDs, xrefs, nav & more]
+* xref:includes:index.adoc[Includes & conditionals]
+----
+
+== Page aliases (redirects)
+
+[.compat.b-antora]#Antora only#
+
+Set `page-aliases` (comma-separated resource IDs) to keep old URLs working after you move or rename a page. Antora emits a redirect at each old location. Demonstrated live by this page's aliases above.
+
+== Attachments
+
+[.compat.b-antora]#Antora only#
+
+Files in a module's [.path]_attachments/_ family are published as-is (PDFs, archives, sample configs). Link to them with the `attachment$` family and the `xref`/`link` macros.
+
+[source,asciidoc]
+----
+Download the xref:attachment$sample-config.zip[sample config].
+----
+
+== Start page
+
+[.compat.b-antora]#Antora only#
+
+The playbook's `site.start_page` sets where `/` redirects. A component can also declare its own `start_page` in [.path]_antora.yml_ so `/component/` lands on a chosen page.
+
+[source,yaml]
+----
+site:
+  start_page: reference::index.adoc
+----

@@ -1,0 +1,62 @@
+= Build & serve this site
+:description: How to render this reference site locally with Antora and view it in a browser.
+:navtitle: Build & serve this site
+
+This project is a standard Antora site. You need Node.js 16+ and network access the first time (to fetch the UI bundle and, optionally, the Antora packages).
+
+== One-time setup
+
+Antora reads content from git, and the `branches: HEAD` source in the playbook reads the *worktree*, so uncommitted edits appear on rebuild. That still requires the directory to be a git repository with at least one commit:
+
+[source,console]
+----
+$ cd asciidoc-antora-reference
+$ git init
+$ git add -A
+$ git commit -m "Initial reference site"
+----
+
+== Build
+
+Use `npx` (no install required):
+
+[source,console]
+----
+$ npx antora --fetch antora-playbook.yml
+----
+
+The `--fetch` flag refreshes remote resources (the UI bundle) and is needed on the first run. On later runs you can drop it:
+
+[source,console]
+----
+$ npx antora antora-playbook.yml
+----
+
+The generated site lands in [.path]_public/_.
+
+== Serve locally
+
+Antora produces plain static files, but xrefs and the UI expect to be served over HTTP (opening [.path]_public/index.html_ from the filesystem breaks navigation). Use any static server:
+
+[source,console]
+----
+$ npx http-server public -c-1 -o
+----
+
+Or, if you prefer the bundled npm scripts:
+
+[source,console]
+----
+$ npm install     # installs Antora + http-server locally
+$ npm run build
+$ npm run serve
+----
+
+== Pin versions for a reproducible share
+
+The committed [.path]_package.json_ pins Antora to `3.1.x` so colleagues get the same output you did. To build fully offline after the first fetch, run `npm install` once, then build without `--fetch`.
+
+[NOTE]
+====
+The playbook fetches the *Antora default UI* from GitLab. To ship a self-contained bundle (no network at build time), download the UI bundle once and point `ui.bundle.url` at the local [.path]_.zip_ file. See xref:antora:index.adoc[] and the {url-antora-docs}/antora-ui-default[Antora UI docs^].
+====

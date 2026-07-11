@@ -1,0 +1,2 @@
+.xref:index.adoc[Antora pipeline features]
+* xref:index.adoc[Resource IDs, xrefs, nav & more]
