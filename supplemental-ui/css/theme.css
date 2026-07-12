@@ -754,3 +754,66 @@ body { background: var(--bg); color: var(--text); }
 /* Focus mode — hide both sidebars for distraction-free reading. */
 html.is-focus .nav-container,
 html.is-focus .toc.sidebar { display: none; }
+
+/* ========================================================================== *
+ *  PRINT / PDF  (browser Print-to-PDF, pagedjs, Playwright, etc.)            *
+ *  Any active theme resets to ink-friendly black-on-white, all interactive   *
+ *  chrome and the custom dock/toolbars are removed, and blocks avoid page     *
+ *  breaks. Delineation is by border (not background) so it survives browsers  *
+ *  that strip background colours from print by default.                      *
+ * ========================================================================== */
+@media print {
+  /* Remove chrome + the UI I added. */
+  .ui-dock,
+  .cb-toolbar,
+  .source-toolbox,
+  .header,
+  .navbar,
+  .nav-container,
+  .nav,
+  .toc.sidebar,
+  .toolbar,
+  .edit-this-page,
+  .pagination,
+  footer.footer { display: none !important; }
+
+  /* Neutralise the palette. */
+  html[data-theme] body { background: #fff !important; color: #000 !important; }
+  [data-theme] .doc,
+  [data-theme] .doc h1, [data-theme] .doc h2, [data-theme] .doc h3,
+  [data-theme] .doc h4, [data-theme] .doc h5, [data-theme] .doc h6,
+  [data-theme] .doc dl > dt { color: #000 !important; }
+  [data-theme] .doc a { color: #000 !important; text-decoration: underline; }
+
+  /* Article fills the page once the sidebars are gone. */
+  .main, .content, article.doc, [data-theme] .doc { max-width: none !important; width: auto !important; }
+
+  /* Code blocks: monochrome, bordered, no accent spine or reserved toolbar gap. */
+  [data-theme] .doc pre,
+  [data-theme] .doc .listingblock pre,
+  [data-theme] .doc .literalblock pre,
+  [data-theme] .doc .cb-has-toolbar > pre {
+    background: #fff !important;
+    color: #000 !important;
+    border: 1px solid #999 !important;
+    box-shadow: none !important;
+    padding-top: 0.875em !important;
+  }
+  [data-theme] .doc pre code,
+  [data-theme] .doc pre code * { color: #000 !important; background: transparent !important; }
+
+  /* Admonitions: white with a border; keep the left edge for the type cue. */
+  [data-theme] .doc .admonitionblock > table {
+    background: #fff !important;
+    box-shadow: none !important;
+    border: 1px solid #999 !important;
+    border-left: 3px solid #666 !important;
+  }
+  [data-theme] .doc .admonitionblock td.content,
+  [data-theme] .doc .admonitionblock td.icon { background: #fff !important; }
+  [data-theme] .doc .admonitionblock td.content { color: #000 !important; }
+
+  /* Keep blocks whole; don't strand a heading at the foot of a page. */
+  .doc pre, .doc .admonitionblock, .doc table, .doc figure, .doc img { break-inside: avoid; page-break-inside: avoid; }
+  .doc h1, .doc h2, .doc h3, .doc h4 { break-after: avoid; page-break-after: avoid; }
+}
