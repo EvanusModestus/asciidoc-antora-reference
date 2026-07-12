@@ -24,6 +24,11 @@ antora:
     - require: '@antora/lunr-extension'
       index_latest_only: true
       languages: [en]
+    # Native PDF — the Assembler merges the component's pages into one AsciiDoc
+    # assembly (resolving Antora resource IDs), then asciidoctor-pdf renders a
+    # paginated book published with the site. Needs the `asciidoctor-pdf` Ruby
+    # command on PATH (gem install asciidoctor-pdf).
+    - require: '@antora/pdf-extension'
 asciidoc:
   attributes:
     # Enables the kbd:[], btn:[], and menu:[] UI macros.

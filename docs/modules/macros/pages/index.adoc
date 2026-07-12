@@ -127,10 +127,10 @@ audio::intro.mp3[options="autoplay,loop"]
 
 [source,asciidoc]
 ----
-Save with icon:floppy-disk[] then icon:check[role=green] when done.
+Save with icon:save[] then icon:check[role=green] when done.
 ----
 
-Save with icon:floppy-disk[] then icon:check[role=green] when done.
+Save with icon:save[] then icon:check[role=green] when done.
 
 == Keyboard, button & menu (UI macros)
 

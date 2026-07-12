@@ -1,0 +1,13 @@
+# Antora Assembler config for @antora/pdf-extension.
+#
+# The reference component is versionless (docs/antora.yml: version: ~). The
+# assembler's default `*` filter only selects a version flagged "latest", which a
+# versionless component isn't — so the default produced no PDF. The `**` globstar
+# matches component versions unconditionally (filter-component-versions.js), which
+# selects the versionless component.
+component_versions: '**'
+# Set during the PDF assembly only (not the HTML site build), so pages can hide
+# HTML-backend-specific demos from the native PDF with ifndef::pdf-export[...].
+asciidoc:
+  attributes:
+    pdf-export: ''

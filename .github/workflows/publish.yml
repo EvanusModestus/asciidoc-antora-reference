@@ -30,6 +30,14 @@ jobs:
         id: pages
         uses: actions/configure-pages@v5
 
+      # The native PDF export (@antora/pdf-extension) shells out to the
+      # asciidoctor-pdf Ruby command, so it must be on PATH before the build.
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+      - name: Install asciidoctor-pdf
+        run: gem install asciidoctor-pdf
+
       - name: Install pinned Antora
         run: npm install
 

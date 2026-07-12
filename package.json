@@ -7,12 +7,16 @@
     "build": "antora --fetch antora-playbook.yml",
     "serve": "http-server public -c-1 -o",
     "watch": "trap 'kill 0' INT TERM EXIT; onchange 'docs/**/*' 'supplemental-ui/**/*' 'antora-playbook.yml' -- npm run build & browser-sync start --server public --startPath reference/index.html --files 'public/_/css/*.css, public/**/*.html' --no-notify; wait",
-    "clean": "antora --clean antora-playbook.yml"
+    "docx": "scripts/export.sh docx",
+    "epub": "scripts/export.sh epub",
+    "export": "scripts/export.sh all",
+    "clean": "antora --clean antora-playbook.yml && rm -rf export"
   },
   "devDependencies": {
-    "@antora/cli": "3.1.x",
+    "@antora/cli": "3.2.0-rc.2",
     "@antora/lunr-extension": "^1.0.0-alpha.13",
-    "@antora/site-generator": "3.1.x",
+    "@antora/pdf-extension": "1.0.0-rc.4",
+    "@antora/site-generator": "3.2.0-rc.2",
     "browser-sync": "3.x",
     "http-server": "14.x",
     "onchange": "7.x"

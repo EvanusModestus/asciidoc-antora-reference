@@ -156,7 +156,9 @@ An em dash -- like this. And an ellipsis...
 In HTML, 1 < 2 && 3 > 2. The &sect; symbol and &#182; via references.
 ----
 
-In HTML, 1 < 2 && 3 > 2. The &sect; symbol and &#182; via references.
+// HTML character references are an HTML-backend feature; hide this rendered
+// demo from the native PDF (asciidoctor-pdf chokes parsing raw `&&`/entities).
+ifndef::pdf-export[In HTML, 1 < 2 && 3 > 2. The &sect; symbol and &#182; via references.]
 
 == Line breaks
 
@@ -194,4 +196,6 @@ Use the triple-plus or single-plus passthrough, or a backslash escape, to stop A
 Show a literal +++<tag>+++, an escaped \*asterisk*, and a literal \{attribute}.
 ----
 
-Show a literal +++<tag>+++, an escaped \*asterisk*, and a literal \{attribute}.
+// Raw passthrough emits a literal <tag>, which asciidoctor-pdf's limited inline
+// HTML subset rejects — keep this rendered demo out of the native PDF.
+ifndef::pdf-export[Show a literal +++<tag>+++, an escaped \*asterisk*, and a literal \{attribute}.]

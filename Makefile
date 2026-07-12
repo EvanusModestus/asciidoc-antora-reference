@@ -8,13 +8,16 @@
 #   make build    render the site into public/
 #   make serve    build, then serve it over HTTP
 #   make watch    rebuild on save + live-reload the browser
+#   make export   DOCX + EPUB of a page (PDF is built natively by the pdf extension)
 #   make clean    remove generated output
 
 PLAYBOOK := antora-playbook.yml
 OUTPUT   := public
+# Which built page to export. Override: make pdf PAGE=reference/blocks/index.html
+PAGE     ?= reference/index.html
 
 .DEFAULT_GOAL := help
-.PHONY: help build serve watch clean install
+.PHONY: help build serve watch docx epub export clean install
 
 help: ## List available targets
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage: make <target>\n\n"} \
@@ -39,8 +42,17 @@ watch: build ## Rebuild on save + live-reload the browser (Ctrl-C to stop)
 			--files '$(OUTPUT)/_/css/*.css, $(OUTPUT)/**/*.html' --no-notify; \
 		wait
 
-clean: ## Remove the generated public/ directory
-	rm -rf $(OUTPUT)
+docx: build ## Export a page to DOCX via pandoc (PAGE=reference/blocks/index.html)
+	scripts/export.sh docx "$(PAGE)"
+
+epub: build ## Export a page to EPUB via pandoc (needs pandoc)
+	scripts/export.sh epub "$(PAGE)"
+
+export: build ## Export a page to DOCX + EPUB into export/ (PDF is built natively)
+	scripts/export.sh all "$(PAGE)"
+
+clean: ## Remove generated output (public/ and export/)
+	rm -rf $(OUTPUT) export
 
 install: ## Install pinned Antora + http-server locally (optional; npx needs nothing)
 	npm install

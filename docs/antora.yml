@@ -13,3 +13,18 @@ nav:
 - modules/attributes/nav.adoc
 - modules/includes/nav.adoc
 - modules/antora/nav.adoc
+# Assembler profile for @antora/pdf-extension: merge the pages, in nav order,
+# into one AsciiDoc assembly that asciidoctor-pdf renders as the reference book.
+ext:
+  assembler:
+  - nav:
+    - modules/ROOT/nav.adoc
+    - modules/text/nav.adoc
+    - modules/blocks/nav.adoc
+    - modules/lists/nav.adoc
+    - modules/sections/nav.adoc
+    - modules/tables/nav.adoc
+    - modules/macros/nav.adoc
+    - modules/attributes/nav.adoc
+    - modules/includes/nav.adoc
+    - modules/antora/nav.adoc
