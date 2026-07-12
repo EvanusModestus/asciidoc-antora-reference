@@ -4,6 +4,7 @@
       used to live here are now in css/theme.css so they adapt per theme. --}}
 <link rel="stylesheet" href="{{uiRootPath}}/css/theme.css">
 <script defer src="{{uiRootPath}}/js/code-toolbar.js"></script>
+<script defer src="{{uiRootPath}}/js/ui-controls.js"></script>
 <script>
   ;(function () {
     try {
@@ -16,6 +17,10 @@
             ? 'tokyo-night'
             : 'rose-dawn')
       document.documentElement.setAttribute('data-theme', theme)
+      // Apply focus mode before paint too, so the sidebars don't flash in.
+      if (localStorage.getItem('adoc-ref-focus') === '1') {
+        document.documentElement.classList.add('is-focus')
+      }
     } catch (e) {
       document.documentElement.setAttribute('data-theme', 'rose-dawn')
     }

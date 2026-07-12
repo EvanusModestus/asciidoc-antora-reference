@@ -21,34 +21,9 @@
       <div class="navbar-end">
         <a class="navbar-item" href="https://docs.asciidoctor.org/asciidoc/latest/" target="_blank" rel="noopener">AsciiDoc docs</a>
         <a class="navbar-item" href="https://docs.antora.org" target="_blank" rel="noopener">Antora docs</a>
-        <div class="navbar-item theme-switch">
-          <label class="is-sr-only" for="theme-select">Color theme</label>
-          <select id="theme-select" aria-label="Color theme" title="Color theme">
-            <option value="rose-dawn">Rosé Pine Dawn</option>
-            <option value="tokyo-night">Tokyo Night</option>
-            <option value="dracula">Dracula</option>
-            <option value="nord">Nord</option>
-            <option value="gruvbox">Gruvbox</option>
-          </select>
-        </div>
       </div>
     </div>
   </nav>
 </header>
-<script>
-  {{!-- Sync the picker with the theme already applied by head-meta.hbs, and
-        persist the visitor's choice. The <select> exists above this script, so
-        no DOMContentLoaded wait is needed. --}}
-  ;(function () {
-    var KEY = 'adoc-ref-theme'
-    var sel = document.getElementById('theme-select')
-    if (!sel) return
-    var current = document.documentElement.getAttribute('data-theme') || 'rose-dawn'
-    sel.value = current
-    sel.addEventListener('change', function () {
-      var value = sel.value
-      document.documentElement.setAttribute('data-theme', value)
-      try { localStorage.setItem(KEY, value) } catch (e) {}
-    })
-  })()
-</script>
+{{!-- Theme picker + focus toggle now live in the bottom control dock,
+      injected by js/ui-controls.js, to keep the top-nav uncluttered. --}}
