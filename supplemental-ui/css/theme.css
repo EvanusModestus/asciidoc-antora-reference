@@ -1,0 +1,655 @@
+/*
+ * theme.css — Live, switchable themes for the AsciiDoc + Antora Reference.
+ *
+ * HOW IT WORKS
+ *   The stock Antora default UI compiles its SCSS to hardcoded hex — it exposes
+ *   ZERO CSS custom properties. So this overlay does two things:
+ *     1. Declares a semantic variable palette five times, once per theme, keyed
+ *        on `html[data-theme="…"]`.
+ *     2. Remaps the default UI's concrete selectors to those variables — written
+ *        ONCE, so every theme flows through the same rules.
+ *
+ *   The active theme is chosen by the `data-theme` attribute on <html>, set
+ *   before first paint by the anti-FOUC script in partials/head-meta.hbs and
+ *   toggled at runtime by the picker in partials/header-content.hbs.
+ *
+ *   This file is loaded AFTER the bundle's css/site.css (see head-meta.hbs), so
+ *   equal-specificity rules win by source order; token rules are scoped under
+ *   [data-theme] to outrank the bundle's built-in highlight.js theme.
+ *
+ * ADDING A THEME
+ *   Copy one `html[data-theme="…"]` block, restyle the variables, add an <option>
+ *   to header-content.hbs. No rule below needs to change.
+ */
+
+/* ========================================================================== *
+ *  THEME PALETTES — variables only                                           *
+ * ========================================================================== */
+
+/* Rosé Pine Dawn — light. Also the :root fallback if data-theme is ever unset. */
+:root,
+html[data-theme="rose-dawn"] {
+  color-scheme: light;
+  --bg:            #faf4ed;
+  --bg-elev:       #fffaf3;
+  --bg-sidebar:    #f2e9e1;
+  --bg-code:       #fffaf3;
+  --bg-inline:     #f2e9e1;
+  --text:          #575279;
+  --text-muted:    #797593;
+  --heading:       #575279;
+  --nav-text:      #423d57;  /* darker plum — the muted --text reads faded in small navbar chips */
+  --border:        #dfdad9;
+  --link:          #907aa9;
+  --link-hover:    #286983;
+  --accent:        #d7827e;
+  --accent-2:      #286983;
+  --sel:           #dfdad9;
+  --shadow:        0 1px 2px rgba(84, 82, 121, 0.05), 0 12px 30px -12px rgba(84, 82, 121, 0.20);
+
+  --syn-comment:   #9893a5;
+  --syn-keyword:   #286983;
+  --syn-string:    #ea9d34;
+  --syn-number:    #d7827e;
+  --syn-function:  #d7827e;
+  --syn-type:      #56949f;
+  --syn-builtin:   #56949f;
+  --syn-variable:  #575279;
+  --syn-attr:      #ea9d34;
+  --syn-tag:       #b4637a;
+  --syn-meta:      #907aa9;
+  --syn-literal:   #907aa9;
+
+  --adm-note:      #286983;
+  --adm-tip:       #56949f;
+  --adm-important: #b4637a;
+  --adm-warning:   #ea9d34;
+  --adm-caution:   #d7827e;
+
+  --compat-both:   #56949f;
+  --compat-adoc:   #286983;
+  --compat-antora: #ea9d34;
+
+  --role-green:    #56949f;
+  --role-red:      #b4637a;
+  --role-blue:     #286983;
+}
+
+/* Tokyo Night — dark. Default when the OS prefers dark and nothing is stored. */
+html[data-theme="tokyo-night"] {
+  color-scheme: dark;
+  --bg:            #1a1b26;
+  --bg-elev:       #1f2335;
+  --bg-sidebar:    #16161e;
+  --bg-code:       #16161e;
+  --bg-inline:     #232538;
+  --text:          #a9b1d6;
+  --text-muted:    #565f89;
+  --heading:       #c0caf5;
+  --nav-text:      #a9b1d6;  /* = --text: darks were already perfect, keep unchanged */
+  --border:        #2a2e42;
+  --link:          #7aa2f7;
+  --link-hover:    #7dcfff;
+  --accent:        #7aa2f7;
+  --accent-2:      #bb9af7;
+  --sel:           #283457;
+  --shadow:        0 1px 2px rgba(0, 0, 0, 0.45), 0 14px 32px -12px rgba(0, 0, 0, 0.60);
+
+  --syn-comment:   #565f89;
+  --syn-keyword:   #bb9af7;
+  --syn-string:    #9ece6a;
+  --syn-number:    #ff9e64;
+  --syn-function:  #7aa2f7;
+  --syn-type:      #2ac3de;
+  --syn-builtin:   #2ac3de;
+  --syn-variable:  #c0caf5;
+  --syn-attr:      #7dcfff;
+  --syn-tag:       #f7768e;
+  --syn-meta:      #7dcfff;
+  --syn-literal:   #ff9e64;
+
+  --adm-note:      #7aa2f7;
+  --adm-tip:       #9ece6a;
+  --adm-important: #f7768e;
+  --adm-warning:   #e0af68;
+  --adm-caution:   #ff9e64;
+
+  --compat-both:   #9ece6a;
+  --compat-adoc:   #7aa2f7;
+  --compat-antora: #e0af68;
+
+  --role-green:    #9ece6a;
+  --role-red:      #f7768e;
+  --role-blue:     #7aa2f7;
+}
+
+/* Dracula — dark. */
+html[data-theme="dracula"] {
+  color-scheme: dark;
+  --bg:            #282a36;
+  --bg-elev:       #2d2f3d;
+  --bg-sidebar:    #21222c;
+  --bg-code:       #21222c;
+  --bg-inline:     #343746;
+  --text:          #f8f8f2;
+  --text-muted:    #6272a4;
+  --heading:       #f8f8f2;
+  --nav-text:      #f8f8f2;  /* = --text: darks were already perfect, keep unchanged */
+  --border:        #44475a;
+  --link:          #8be9fd;
+  --link-hover:    #ff79c6;
+  --accent:        #bd93f9;
+  --accent-2:      #ff79c6;
+  --sel:           #44475a;
+  --shadow:        0 1px 2px rgba(0, 0, 0, 0.40), 0 14px 32px -12px rgba(0, 0, 0, 0.55);
+
+  --syn-comment:   #6272a4;
+  --syn-keyword:   #ff79c6;
+  --syn-string:    #f1fa8c;
+  --syn-number:    #bd93f9;
+  --syn-function:  #50fa7b;
+  --syn-type:      #8be9fd;
+  --syn-builtin:   #8be9fd;
+  --syn-variable:  #f8f8f2;
+  --syn-attr:      #50fa7b;
+  --syn-tag:       #ff79c6;
+  --syn-meta:      #ffb86c;
+  --syn-literal:   #bd93f9;
+
+  --adm-note:      #8be9fd;
+  --adm-tip:       #50fa7b;
+  --adm-important: #ff5555;
+  --adm-warning:   #f1fa8c;
+  --adm-caution:   #ffb86c;
+
+  --compat-both:   #50fa7b;
+  --compat-adoc:   #8be9fd;
+  --compat-antora: #ffb86c;
+
+  --role-green:    #50fa7b;
+  --role-red:      #ff5555;
+  --role-blue:     #8be9fd;
+}
+
+/* Nord — dark. */
+html[data-theme="nord"] {
+  color-scheme: dark;
+  --bg:            #2e3440;
+  --bg-elev:       #3b4252;
+  --bg-sidebar:    #2b303b;
+  --bg-code:       #272c36;
+  --bg-inline:     #3b4252;
+  --text:          #d8dee9;
+  --text-muted:    #7b88a1;
+  --heading:       #eceff4;
+  --nav-text:      #d8dee9;  /* = --text: darks were already perfect, keep unchanged */
+  --border:        #434c5e;
+  --link:          #88c0d0;
+  --link-hover:    #8fbcbb;
+  --accent:        #88c0d0;
+  --accent-2:      #81a1c1;
+  --sel:           #434c5e;
+  --shadow:        0 1px 2px rgba(0, 0, 0, 0.38), 0 14px 32px -12px rgba(0, 0, 0, 0.50);
+
+  --syn-comment:   #616e88;
+  --syn-keyword:   #81a1c1;
+  --syn-string:    #a3be8c;
+  --syn-number:    #b48ead;
+  --syn-function:  #88c0d0;
+  --syn-type:      #8fbcbb;
+  --syn-builtin:   #8fbcbb;
+  --syn-variable:  #d8dee9;
+  --syn-attr:      #8fbcbb;
+  --syn-tag:       #81a1c1;
+  --syn-meta:      #5e81ac;
+  --syn-literal:   #b48ead;
+
+  --adm-note:      #88c0d0;
+  --adm-tip:       #a3be8c;
+  --adm-important: #bf616a;
+  --adm-warning:   #ebcb8b;
+  --adm-caution:   #d08770;
+
+  --compat-both:   #a3be8c;
+  --compat-adoc:   #88c0d0;
+  --compat-antora: #ebcb8b;
+
+  --role-green:    #a3be8c;
+  --role-red:      #bf616a;
+  --role-blue:     #88c0d0;
+}
+
+/* Gruvbox — dark, warm. */
+html[data-theme="gruvbox"] {
+  color-scheme: dark;
+  --bg:            #282828;
+  --bg-elev:       #32302f;
+  --bg-sidebar:    #1d2021;
+  --bg-code:       #1d2021;
+  --bg-inline:     #3c3836;
+  --text:          #ebdbb2;
+  --text-muted:    #928374;
+  --heading:       #fbf1c7;
+  --nav-text:      #ebdbb2;  /* = --text: darks were already perfect, keep unchanged */
+  --border:        #3c3836;
+  --link:          #83a598;
+  --link-hover:    #8ec07c;
+  --accent:        #fabd2f;
+  --accent-2:      #fe8019;
+  --sel:           #504945;
+  --shadow:        0 1px 2px rgba(0, 0, 0, 0.45), 0 14px 32px -12px rgba(0, 0, 0, 0.55);
+
+  --syn-comment:   #928374;
+  --syn-keyword:   #fb4934;
+  --syn-string:    #b8bb26;
+  --syn-number:    #d3869b;
+  --syn-function:  #fabd2f;
+  --syn-type:      #83a598;
+  --syn-builtin:   #fe8019;
+  --syn-variable:  #ebdbb2;
+  --syn-attr:      #8ec07c;
+  --syn-tag:       #8ec07c;
+  --syn-meta:      #83a598;
+  --syn-literal:   #d3869b;
+
+  --adm-note:      #83a598;
+  --adm-tip:       #b8bb26;
+  --adm-important: #fb4934;
+  --adm-warning:   #fabd2f;
+  --adm-caution:   #fe8019;
+
+  --compat-both:   #b8bb26;
+  --compat-adoc:   #83a598;
+  --compat-antora: #fabd2f;
+
+  --role-green:    #b8bb26;
+  --role-red:      #fb4934;
+  --role-blue:     #83a598;
+}
+
+/* ========================================================================== *
+ *  CONSUMING RULES — written once, every theme flows through these           *
+ * ========================================================================== */
+
+/* Smooth the moment of switching (but never animate layout). */
+body,
+.header,
+.nav-container,
+.nav,
+.toolbar,
+.doc pre,
+.admonitionblock {
+  transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+
+/* --- Page + selection ---------------------------------------------------- */
+body { background: var(--bg); color: var(--text); }
+::selection { background: var(--sel); }
+* { scrollbar-color: var(--border) transparent; }
+::-webkit-scrollbar { width: 11px; height: 11px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 6px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* --- Top navbar ---------------------------------------------------------- *
+ *  The bundle forces `.navbar{color:#fff}` + `.navbar *{color:inherit
+ *  !important}`, so every item is white — fine on the dark headers, invisible
+ *  on the light Rosé Pine header. The ONLY lever for the resting color is
+ *  `.navbar` itself (children inherit it); brand + hover need !important to
+ *  beat that universal rule. End items become chips with a contrast-safe
+ *  border (derived from --text-muted, not --border) so they never drown out.  */
+[data-theme] .header { background: var(--bg-elev); border-bottom: 1px solid var(--border); box-shadow: none; }
+[data-theme] .navbar { background: transparent; color: var(--nav-text); }
+[data-theme] .navbar-brand .navbar-item { color: var(--heading) !important; font-weight: 600; }
+[data-theme] .navbar-burger span { background-color: var(--text); }
+[data-theme] .navbar-end > a.navbar-item,
+[data-theme] .navbar-end .theme-switch select {
+  border: 1px solid color-mix(in srgb, var(--text-muted) 45%, transparent);
+  border-radius: 7px;
+}
+[data-theme] .navbar-end > a.navbar-item {
+  /* The bundle sets BOTH `.navbar *{color:inherit!important}` and a global
+     `a{color:inherit!important}`; the anchor chips resolve that chain to the
+     bundle's white, not to .navbar's color. Set it explicitly, !important,
+     at higher specificity than either inherit rule. The <select> inherits
+     correctly on its own, but pin it too for symmetry. */
+  color: var(--nav-text) !important;
+  margin: 0 0.2rem;
+  padding: 0.35rem 0.75rem;
+  line-height: 1.4;
+  font-weight: 500;
+  transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+[data-theme] .navbar-end .theme-switch select { color: var(--nav-text) !important; font-weight: 500; }
+[data-theme] .navbar-end > a.navbar-item:hover,
+[data-theme] .navbar-end > a.navbar-item:focus {
+  color: var(--link) !important;
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  border-color: var(--accent);
+}
+
+/* --- Left navigation ----------------------------------------------------- */
+.nav-container, .nav { background: var(--bg-sidebar); }
+.nav { border-right: 1px solid var(--border); }
+.nav-menu, .nav-text, .nav-menu a { color: var(--text-muted); }
+.nav-menu a:hover { color: var(--link); }
+.nav-title { color: var(--text-muted); }
+.nav-menu .is-current-page > .nav-link,
+.nav-menu a.is-current-page,
+.nav-list .nav-item.is-active > .nav-link { color: var(--link); font-weight: 600; }
+.nav-panel-explore .context .title { color: var(--heading); }
+.nav-panel-explore .context .version, .nav-panel-explore .components .version { color: var(--text-muted); }
+.nav-toggle, .nav-close { filter: none; }
+
+/* --- Right table of contents --------------------------------------------- */
+/* Specificity matches the bundle's `.sidebar.toc .toc-menu a` (0,3,1). */
+.toc.sidebar .toc-menu h3 { color: var(--text-muted); }
+.sidebar.toc .toc-menu a { color: var(--text-muted); border-left: 1px solid transparent; }
+.sidebar.toc .toc-menu a:hover { color: var(--link); }
+.sidebar.toc .toc-menu a.is-active { color: var(--link); border-left-color: var(--accent); }
+
+/* --- Toolbar / breadcrumbs ----------------------------------------------- */
+.toolbar { background: var(--bg); color: var(--text-muted); border-bottom: 1px solid var(--border); box-shadow: none; }
+.breadcrumbs a { color: var(--text-muted); }
+.breadcrumbs a:hover { color: var(--link); }
+.breadcrumbs li::after { color: var(--text-muted); }
+.edit-this-page a { color: var(--text-muted); }
+.edit-this-page a:hover { color: var(--link); }
+
+/* --- Document body ------------------------------------------------------- */
+.doc { color: var(--text); }
+.doc h1, .doc h2, .doc h3, .doc h4, .doc h5, .doc h6 { color: var(--heading); }
+.doc h1 > a.anchor, .doc h2 > a.anchor, .doc h3 > a.anchor,
+.doc h4 > a.anchor, .doc h5 > a.anchor, .doc h6 > a.anchor { color: var(--accent); }
+.doc h2 { border-bottom-color: var(--border); }
+.doc a { color: var(--link); }
+.doc a:hover { color: var(--link-hover); }
+.doc hr, .doc .sect1 + .sect1 { border-color: var(--border); }
+.doc hr { background: var(--border); }
+.doc mark, .doc .marked { background: var(--accent); color: var(--bg); border-radius: 2px; }
+
+/* --- Inline code --------------------------------------------------------- */
+.doc p code, .doc li code, .doc td code, .doc dt code,
+.doc th code, .doc :not(pre) > code {
+  background: var(--bg-inline);
+  color: var(--accent-2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.1em 0.35em;
+}
+
+/* --- Code blocks --------------------------------------------------------- *
+ *  The bundle backgrounds code at up to (0,3,1) — `.doc .listingblock
+ *  pre:not(.highlight)` — and (0,2,2) on `.doc pre.highlight>code`. The
+ *  leading [data-theme] adds (0,1,0) so these meet or beat those and the
+ *  near-white #fafafa gives way to the theme surface.                        */
+[data-theme] .doc pre,
+[data-theme] .doc pre.highlight,
+[data-theme] .doc pre.highlightjs,
+[data-theme] .doc .listingblock pre,
+[data-theme] .doc .literalblock pre {
+  background: var(--bg-code);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent-2);   /* accent spine — makes code blocks pop */
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+}
+/* The highlighted-block background lives on the <code>, not the <pre>. */
+[data-theme] .doc pre code,
+[data-theme] .doc code.hljs,
+[data-theme] .doc pre.highlight > code,
+[data-theme] .doc pre.highlightjs > code {
+  background: transparent;
+  color: var(--text);
+  box-shadow: none;
+}
+[data-theme] .doc .listingblock > .title,
+[data-theme] .doc .literalblock > .title { color: var(--text-muted); }
+[data-theme] .doc pre.highlightjs > code .line-numbers,
+[data-theme] .doc pre.highlightjs > code::before { color: var(--text-muted); }
+
+/* --- Copy button + language label (source-toolbox, injected by site.js) --- *
+ *  The bundle hides it until block-hover and paints it flat grey with a #333
+ *  toast arrow. Here it fades in on hover, the copy button reads as a chip,
+ *  the icon inherits currentColor, and the "Copied!" toast is fully themed.   */
+[data-theme] .doc .source-toolbox {
+  color: var(--text-muted);
+  top: 0.4rem; right: 0.6rem;
+  gap: 0.15rem;
+}
+[data-theme] .doc .source-toolbox .source-lang { color: var(--text-muted); font-weight: 600; }
+[data-theme] .doc .source-toolbox > :not(:last-child)::after { color: var(--border); }
+[data-theme] .doc .source-toolbox .copy-button {
+  color: var(--text-muted);
+  border: 1px solid transparent;
+  border-radius: 5px;
+  padding: 0.15rem 0.3rem;
+  transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+[data-theme] .doc .source-toolbox .copy-button:hover {
+  color: var(--accent-2);
+  background: color-mix(in srgb, var(--accent-2) 14%, transparent);
+  border-color: color-mix(in srgb, var(--accent-2) 40%, transparent);
+}
+[data-theme] .doc .source-toolbox svg.copy-icon { fill: currentColor; }
+[data-theme] .doc .source-toolbox img.copy-icon { filter: none; }
+/* "Copied!" toast bubble + its little arrow. */
+[data-theme] .doc .source-toolbox .copy-toast {
+  background: var(--bg-elev);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: var(--shadow);
+}
+[data-theme] .doc .source-toolbox .copy-toast::after { border-left-color: var(--bg-elev); }
+
+/* --- Syntax highlighting (highlight.js tokens, injected at runtime) ------- *
+ *  Scoped under [data-theme] so these outrank the bundle's built-in theme.   */
+[data-theme] .hljs { background: transparent; color: var(--text); }
+[data-theme] .hljs-comment, [data-theme] .hljs-quote { color: var(--syn-comment); font-style: italic; }
+[data-theme] .hljs-keyword, [data-theme] .hljs-selector-tag,
+[data-theme] .hljs-doctag, [data-theme] .hljs-formula { color: var(--syn-keyword); }
+[data-theme] .hljs-string, [data-theme] .hljs-regexp, [data-theme] .hljs-char.escape_ { color: var(--syn-string); }
+[data-theme] .hljs-number, [data-theme] .hljs-literal { color: var(--syn-number); }
+[data-theme] .hljs-title.function_, [data-theme] .hljs-function .hljs-title,
+[data-theme] .hljs-section { color: var(--syn-function); }
+[data-theme] .hljs-title, [data-theme] .hljs-title.class_, [data-theme] .hljs-type { color: var(--syn-type); }
+[data-theme] .hljs-built_in, [data-theme] .hljs-builtin-name { color: var(--syn-builtin); }
+[data-theme] .hljs-variable, [data-theme] .hljs-template-variable, [data-theme] .hljs-params { color: var(--syn-variable); }
+[data-theme] .hljs-attr, [data-theme] .hljs-attribute, [data-theme] .hljs-property { color: var(--syn-attr); }
+[data-theme] .hljs-tag, [data-theme] .hljs-name,
+[data-theme] .hljs-selector-id, [data-theme] .hljs-selector-class { color: var(--syn-tag); }
+[data-theme] .hljs-meta, [data-theme] .hljs-meta .hljs-keyword { color: var(--syn-meta); }
+[data-theme] .hljs-symbol, [data-theme] .hljs-bullet, [data-theme] .hljs-link { color: var(--syn-literal); }
+[data-theme] .hljs-deletion { color: var(--adm-important); }
+[data-theme] .hljs-addition { color: var(--adm-tip); }
+[data-theme] .hljs-emphasis { font-style: italic; }
+[data-theme] .hljs-strong { font-weight: 700; }
+
+/* --- Admonitions — elevated typed callouts ------------------------------- *
+ *  Colored left edge + tinted icon chip + faint type-tinted wash + shadow, so
+ *  NOTE / TIP / IMPORTANT / WARNING / CAUTION read as distinct callouts. The
+ *  per-type `td.content` tint is (0,4,1) — it already outranks the bundle's
+ *  #fafafa (0,2,2), so no [data-theme] prefix is needed. Each tint declares a
+ *  solid fallback FIRST, then color-mix, so browsers without color-mix land on
+ *  the dark surface rather than the bundle's light default.                   */
+.doc .admonitionblock > table {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-left-width: 4px;
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.doc .admonitionblock td.content { color: var(--text); border-left-color: var(--border); }
+.doc .admonitionblock td.content > .title { color: var(--heading); }
+.doc .admonitionblock td.icon { border: 0; }
+/* Left edge per type. */
+.doc .admonitionblock.note > table      { border-left-color: var(--adm-note); }
+.doc .admonitionblock.tip > table       { border-left-color: var(--adm-tip); }
+.doc .admonitionblock.important > table { border-left-color: var(--adm-important); }
+.doc .admonitionblock.warning > table   { border-left-color: var(--adm-warning); }
+.doc .admonitionblock.caution > table   { border-left-color: var(--adm-caution); }
+/* Icon chip — a stronger tint behind the glyph. */
+.doc .admonitionblock.note td.icon      { background: var(--bg-elev); background: color-mix(in srgb, var(--adm-note) 16%, var(--bg-elev)); }
+.doc .admonitionblock.tip td.icon       { background: var(--bg-elev); background: color-mix(in srgb, var(--adm-tip) 16%, var(--bg-elev)); }
+.doc .admonitionblock.important td.icon { background: var(--bg-elev); background: color-mix(in srgb, var(--adm-important) 16%, var(--bg-elev)); }
+.doc .admonitionblock.warning td.icon   { background: var(--bg-elev); background: color-mix(in srgb, var(--adm-warning) 16%, var(--bg-elev)); }
+.doc .admonitionblock.caution td.icon   { background: var(--bg-elev); background: color-mix(in srgb, var(--adm-caution) 16%, var(--bg-elev)); }
+/* Content wash — a faint tint of the type color. */
+.doc .admonitionblock.note td.content      { background: var(--bg-elev); background: color-mix(in srgb, var(--adm-note) 6%, var(--bg-elev)); }
+.doc .admonitionblock.tip td.content       { background: var(--bg-elev); background: color-mix(in srgb, var(--adm-tip) 6%, var(--bg-elev)); }
+.doc .admonitionblock.important td.content { background: var(--bg-elev); background: color-mix(in srgb, var(--adm-important) 6%, var(--bg-elev)); }
+.doc .admonitionblock.warning td.content   { background: var(--bg-elev); background: color-mix(in srgb, var(--adm-warning) 6%, var(--bg-elev)); }
+.doc .admonitionblock.caution td.content   { background: var(--bg-elev); background: color-mix(in srgb, var(--adm-caution) 6%, var(--bg-elev)); }
+/* Icon glyph color per type. */
+.doc .admonitionblock.note td.icon .icon-note::before    { color: var(--adm-note); }
+.doc .admonitionblock.tip td.icon .icon-tip::before     { color: var(--adm-tip); }
+.doc .admonitionblock.important td.icon .icon-important::before { color: var(--adm-important); }
+.doc .admonitionblock.warning td.icon .icon-warning::before { color: var(--adm-warning); }
+.doc .admonitionblock.caution td.icon .icon-caution::before { color: var(--adm-caution); }
+
+/* --- Tables -------------------------------------------------------------- */
+.doc table.tableblock { color: var(--text); }
+/* Include the `table` element to match the bundle's `.doc table.tableblock td` (0,2,2). */
+.doc table.tableblock, .doc table.tableblock th, .doc table.tableblock td { border-color: var(--border); }
+.doc table.tableblock thead th { background: var(--bg-elev); color: var(--heading); }
+.doc table.tableblock.grid-all > * > tr > * { border-color: var(--border); }
+.doc table.stripes-all tbody tr,
+.doc table.stripes-odd tbody tr:nth-of-type(odd),
+.doc table.stripes-even tbody tr:nth-of-type(even),
+.doc table.stripes-hover tbody tr:hover { background: var(--bg-elev); }
+
+/* --- Quotes, sidebars, examples ------------------------------------------ */
+.doc .quoteblock { color: var(--text-muted); border-left: 3px solid var(--accent); }
+.doc .quoteblock .attribution { color: var(--text-muted); }
+.doc .quoteblock .attribution cite { color: var(--text-muted); }
+.doc .sidebarblock { background: var(--bg-elev); border: 1px solid var(--border); border-radius: 6px; }
+.doc .sidebarblock > .content > .title { color: var(--heading); }
+.doc .exampleblock > .content { background: var(--bg-elev); border: 1px solid var(--border); border-radius: 6px; }
+.doc .verseblock { color: var(--text); }
+
+/* --- Keyboard / button / menu UI macros ---------------------------------- */
+.doc kbd { background: var(--bg-elev); border: 1px solid var(--border); color: var(--text); box-shadow: 0 1px 0 var(--border); }
+.doc .keyseq { color: var(--text); }
+.doc b.button { color: var(--text); }
+.doc .menuseq b.caret { color: var(--text-muted); }
+
+/* --- Description lists / labels ------------------------------------------ */
+.doc dl > dt { color: var(--heading); }
+
+/* ========================================================================== *
+ *  BUNDLE LIGHT-SURFACE OVERRIDES                                            *
+ *  The stock UI hardcodes light backgrounds (#fafafa/#f0f0f0/#fff/#e1e1e1)   *
+ *  on these surfaces at up to (0,2,3). Each rule below carries a leading     *
+ *  [data-theme] (+0,1,0) so it outranks the bundle outright — no more light  *
+ *  boxes swallowing the themed text. Enumerated from site.css, not guessed.  *
+ * ========================================================================== */
+/* Admonition content backgrounds are handled per-type (typed callouts) above. */
+[data-theme] .doc .quoteblock,
+[data-theme] .doc .verseblock { background: var(--bg-elev); }
+[data-theme] .doc .exampleblock > .content,
+[data-theme] .doc details.result > .content { background: var(--bg-elev); }
+[data-theme] .doc .sidebarblock { background: var(--bg-elev); }
+[data-theme] .doc h1.sect0 { background: var(--bg); color: var(--heading); }
+[data-theme] #preamble .abstract blockquote {
+  background: var(--bg-elev); color: var(--text-muted); border-left-color: var(--accent);
+}
+[data-theme] .doc kbd { background: var(--bg-elev); }
+[data-theme] .sidebar.toc .toc-menu a:focus { background: transparent; }
+/* Inline code the bundle backgrounds via colist/thead selectors, not just p. */
+[data-theme] .doc .colist > table code,
+[data-theme] .doc p code,
+[data-theme] .doc thead code { background: var(--bg-inline); color: var(--accent-2); }
+/* Zebra-striped table rows (bundle uses the > child combinator). */
+[data-theme] .doc table.stripes-all > tbody > tr,
+[data-theme] .doc table.stripes-even > tbody > tr:nth-of-type(2n),
+[data-theme] .doc table.stripes-hover > tbody > tr:hover,
+[data-theme] .doc table.stripes-odd > tbody > tr:nth-of-type(odd) { background: var(--bg-elev); }
+
+/* --- Site chrome outside .doc (footer, nav panels, dropdowns, scrollbar) --- *
+ *  These live outside the document body, so the .doc-scoped rules above never  *
+ *  reach them. Enumerated from site.css: footer #e1e1e1, nav-panel #fafafa,    *
+ *  version pill #c1c1c1, divider #e1e1e1, dropdown #fff, html scrollbar.       */
+[data-theme] footer.footer {
+  background-color: var(--bg-elev); color: var(--text-muted); border-top: 1px solid var(--border);
+}
+[data-theme] footer.footer a { color: var(--link); }
+/* Left-nav "explore" panel — the component/version selector pinned at the bottom. */
+[data-theme] .nav-panel-explore { background: var(--bg-sidebar); border-top: 1px solid var(--border); box-shadow: none; }
+[data-theme] .nav-panel-explore .components { box-shadow: none; }
+[data-theme] .nav-panel-explore .component .version a { background: var(--bg-elev); color: var(--text-muted); }
+/* Navbar dropdown / collapsed mobile menu surfaces. */
+[data-theme] .navbar-menu, [data-theme] .navbar-dropdown { background: var(--bg-elev); box-shadow: none; }
+[data-theme] .navbar-dropdown { border-color: var(--border); }
+[data-theme] .navbar-menu .navbar-link:hover,
+[data-theme] .navbar-menu a.navbar-item:hover,
+[data-theme] .navbar-dropdown a.navbar-item:hover {
+  background: color-mix(in srgb, var(--accent) 14%, transparent); color: var(--link);
+}
+[data-theme] .navbar-divider { background-color: var(--border); }
+[data-theme] html::-webkit-scrollbar { background-color: transparent; }
+
+/* ========================================================================== *
+ *  COMPATIBILITY BADGES  (relocated here from head-meta.hbs so they adapt)   *
+ *  Rendered inline via [.compat.b-both]#…#, .b-adoc, .b-antora.              *
+ *  Outline style: colored text + border + faint tint — legible on any theme. *
+ * ========================================================================== */
+.compat {
+  display: inline-block;
+  font-size: 0.70rem;
+  font-weight: 600;
+  line-height: 1.5;
+  padding: 0.02rem 0.55rem;
+  border-radius: 1rem;
+  letter-spacing: 0.02em;
+  vertical-align: middle;
+  white-space: nowrap;
+  border: 1px solid transparent;
+  text-decoration: none;
+  background: transparent;
+}
+.compat.b-both   { color: var(--compat-both);   border-color: var(--compat-both);   background: color-mix(in srgb, var(--compat-both) 12%, transparent); }
+.compat.b-adoc   { color: var(--compat-adoc);   border-color: var(--compat-adoc);   background: color-mix(in srgb, var(--compat-adoc) 12%, transparent); }
+.compat.b-antora { color: var(--compat-antora); border-color: var(--compat-antora); background: color-mix(in srgb, var(--compat-antora) 12%, transparent); }
+.doc .compat + .compat { margin-left: 0.25rem; }
+.doc h2 .compat, .doc h3 .compat { font-size: 0.6rem; vertical-align: super; }
+
+/* Built-in text-span roles — themed so they stay legible in dark palettes. */
+.doc .underline { text-decoration: underline; }
+.doc .line-through { text-decoration: line-through; }
+.doc .big { font-size: larger; }
+.doc .small { font-size: smaller; }
+.doc .green { color: var(--role-green); }
+.doc .red { color: var(--role-red); }
+.doc .blue { color: var(--role-blue); }
+
+/* ========================================================================== *
+ *  THEME PICKER  (markup lives in partials/header-content.hbs)               *
+ * ========================================================================== */
+.theme-switch { display: inline-flex; align-items: center; }
+.theme-switch .is-sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+.theme-switch select {
+  appearance: none;
+  -webkit-appearance: none;
+  background: var(--bg-elev);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.2rem 1.5rem 0.2rem 0.6rem;
+  font-size: 0.75rem;
+  font-family: inherit;
+  line-height: 1.4;
+  cursor: pointer;
+  /* Caret drawn as an inline SVG so it recolors with --text-muted. */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%23888888' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.55rem center;
+}
+.theme-switch select:hover { border-color: var(--text-muted); }
+.theme-switch select:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.theme-switch select option { background: var(--bg-elev); color: var(--text); }

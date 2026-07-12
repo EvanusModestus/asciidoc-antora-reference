@@ -1,32 +1,22 @@
-<style>
-/* Compatibility badges for the reference site. Rendered inline via
-   [.compat.b-both]#...#, [.compat.b-adoc]#...#, [.compat.b-antora]#...# */
-.compat {
-  display: inline-block;
-  font-size: 0.70rem;
-  font-weight: 600;
-  line-height: 1.5;
-  padding: 0.02rem 0.55rem;
-  border-radius: 1rem;
-  letter-spacing: 0.02em;
-  vertical-align: middle;
-  white-space: nowrap;
-  border: 1px solid transparent;
-  text-decoration: none;
-}
-.compat.b-both   { background: #e7f5ec; color: #1a7f43; border-color: #b7e0c4; }
-.compat.b-adoc   { background: #eaf1fb; color: #1c56b0; border-color: #c2d6f2; }
-.compat.b-antora { background: #fdeede; color: #b5651d; border-color: #f5d3a8; }
-.doc .compat + .compat { margin-left: 0.25rem; }
-/* Tighten the gap when a badge trails a heading. */
-.doc h2 .compat, .doc h3 .compat { font-size: 0.6rem; vertical-align: super; }
-
-/* Guarantee the built-in text-span roles render regardless of UI bundle version. */
-.doc .underline { text-decoration: underline; }
-.doc .line-through { text-decoration: line-through; }
-.doc .big { font-size: larger; }
-.doc .small { font-size: smaller; }
-.doc .green { color: #1a7f43; }
-.doc .red { color: #b5651d; }
-.doc .blue { color: #1c56b0; }
-</style>
+{{!-- Injected into <head> AFTER the bundle's css/site.css, so the theme overlay
+      wins the cascade. The inline script sets data-theme BEFORE first paint to
+      avoid a flash of the wrong theme (FOUC). Badge and text-role styles that
+      used to live here are now in css/theme.css so they adapt per theme. --}}
+<link rel="stylesheet" href="{{uiRootPath}}/css/theme.css">
+<script>
+  ;(function () {
+    try {
+      var KEY = 'adoc-ref-theme'
+      var THEMES = { 'rose-dawn': 1, 'tokyo-night': 1, 'dracula': 1, 'nord': 1, 'gruvbox': 1 }
+      var stored = localStorage.getItem(KEY)
+      var theme = THEMES[stored]
+        ? stored
+        : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+            ? 'tokyo-night'
+            : 'rose-dawn')
+      document.documentElement.setAttribute('data-theme', theme)
+    } catch (e) {
+      document.documentElement.setAttribute('data-theme', 'rose-dawn')
+    }
+  })()
+</script>
