@@ -409,40 +409,64 @@ body { background: var(--bg); color: var(--text); }
 [data-theme] .doc pre.highlightjs > code .line-numbers,
 [data-theme] .doc pre.highlightjs > code::before { color: var(--text-muted); }
 
-/* --- Copy button + language label (source-toolbox, injected by site.js) --- *
- *  The bundle hides it until block-hover and paints it flat grey with a #333
- *  toast arrow. Here it fades in on hover, the copy button reads as a chip,
- *  the icon inherits currentColor, and the "Copied!" toast is fully themed.   */
-[data-theme] .doc .source-toolbox {
-  color: var(--text-muted);
-  top: 0.4rem; right: 0.6rem;
-  gap: 0.15rem;
+/* --- Custom code toolbar (js/code-toolbar.js) ---------------------------- *
+ *  Replaces the bundle's hover-only grey `.source-toolbox` with an always-on
+ *  language pill (in the accent, matching the code block's spine) + a real
+ *  copy button that swaps to a check + "Copied". Header space is reserved on
+ *  the <pre> so the toolbar never sits on top of the first line of code.      */
+[data-theme] .doc .source-toolbox { display: none; }
+
+[data-theme] .doc .listingblock .content.cb-has-toolbar { position: relative; }
+[data-theme] .doc .cb-has-toolbar > pre { padding-top: 2.5rem; }
+[data-theme] .doc .cb-toolbar {
+  position: absolute;
+  top: 0.55rem;
+  right: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  z-index: 1;
 }
-[data-theme] .doc .source-toolbox .source-lang { color: var(--text-muted); font-weight: 600; }
-[data-theme] .doc .source-toolbox > :not(:last-child)::after { color: var(--border); }
-[data-theme] .doc .source-toolbox .copy-button {
-  color: var(--text-muted);
-  border: 1px solid transparent;
-  border-radius: 5px;
-  padding: 0.15rem 0.3rem;
-  transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
-}
-[data-theme] .doc .source-toolbox .copy-button:hover {
+[data-theme] .doc .cb-lang {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.62rem;
+  font-weight: 700;
+  line-height: 1;
   color: var(--accent-2);
   background: color-mix(in srgb, var(--accent-2) 14%, transparent);
-  border-color: color-mix(in srgb, var(--accent-2) 40%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent-2) 35%, transparent);
+  border-radius: 5px;
+  padding: 0.24rem 0.45rem;
 }
-[data-theme] .doc .source-toolbox svg.copy-icon { fill: currentColor; }
-[data-theme] .doc .source-toolbox img.copy-icon { filter: none; }
-/* "Copied!" toast bubble + its little arrow. */
-[data-theme] .doc .source-toolbox .copy-toast {
+[data-theme] .doc .cb-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  font-family: inherit;
+  font-size: 0.72rem;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--text-muted);
   background: var(--bg-elev);
-  color: var(--text);
   border: 1px solid var(--border);
-  border-radius: 6px;
-  box-shadow: var(--shadow);
+  border-radius: 5px;
+  padding: 0.26rem 0.5rem;
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
 }
-[data-theme] .doc .source-toolbox .copy-toast::after { border-left-color: var(--bg-elev); }
+[data-theme] .doc .cb-copy svg { flex: none; }
+[data-theme] .doc .cb-copy:hover {
+  color: var(--accent-2);
+  background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+  border-color: color-mix(in srgb, var(--accent-2) 45%, transparent);
+}
+[data-theme] .doc .cb-copy:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+[data-theme] .doc .cb-copy.is-copied {
+  color: var(--adm-tip);
+  border-color: color-mix(in srgb, var(--adm-tip) 45%, transparent);
+  background: color-mix(in srgb, var(--adm-tip) 12%, transparent);
+}
 
 /* --- Syntax highlighting (highlight.js tokens, injected at runtime) ------- *
  *  Scoped under [data-theme] so these outrank the bundle's built-in theme.   */
