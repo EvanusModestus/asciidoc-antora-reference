@@ -1,5 +1,6 @@
 # Antora playbook for the AsciiDoc + Antora Reference site.
 #
+# Setup:   npm install   (required — the Lunr search extension must resolve)
 # Build:   npx antora --fetch antora-playbook.yml
 # Serve:   npx http-server public -c-1   (or any static server)
 #
@@ -15,6 +16,14 @@ content:
   - url: .
     start_path: docs
     branches: HEAD
+antora:
+  extensions:
+    # Lunr client-side search — generates search-index.js and injects the search
+    # UI (lunr.js + search-ui.js). Requires `npm install` (search is no longer
+    # npx-only; the build alone still fetches the UI bundle without a lockfile).
+    - require: '@antora/lunr-extension'
+      index_latest_only: true
+      languages: [en]
 asciidoc:
   attributes:
     # Enables the kbd:[], btn:[], and menu:[] UI macros.

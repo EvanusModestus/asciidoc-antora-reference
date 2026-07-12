@@ -591,6 +591,42 @@ body { background: var(--bg); color: var(--text); }
 [data-theme] .navbar-divider { background-color: var(--border); }
 [data-theme] html::-webkit-scrollbar { background-color: transparent; }
 
+/* --- Search (lunr) — input + results dropdown ---------------------------- *
+ *  Input matches the navbar chips; the results panel gets the same elevation
+ *  as the callouts (--shadow). #search-input is an ID selector, so the
+ *  [data-theme]-prefixed rules already outrank the bundle's #search-input.    */
+[data-theme] #search-input {
+  background: var(--bg-elev);
+  color: var(--nav-text) !important;   /* beat .navbar *{color:inherit!important} */
+  border: 1px solid color-mix(in srgb, var(--text-muted) 45%, transparent);
+  border-radius: 7px;
+}
+[data-theme] #search-input::placeholder { color: var(--text-muted); opacity: 1; }
+[data-theme] #search-input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+[data-theme] .search-result-dropdown-menu {
+  background: var(--bg-elev);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+}
+[data-theme] .search-result-item { border-color: var(--border); }
+[data-theme] .search-result-item:hover,
+[data-theme] .search-result-document-hit:hover { background: color-mix(in srgb, var(--accent) 12%, transparent); }
+[data-theme] .search-result-document-title { color: var(--heading); }
+[data-theme] .search-result-document-hit a { color: var(--text); }
+[data-theme] .search-result-document-hit a:hover { color: var(--link); }
+[data-theme] .search-result-section-title,
+[data-theme] .search-result-component-header,
+[data-theme] .search-result-dataset,
+[data-theme] .search-result-keywords-field-label { color: var(--text-muted); }
+[data-theme] .search-result-highlight {
+  color: var(--accent-2);
+  background: color-mix(in srgb, var(--accent-2) 16%, transparent);
+  font-weight: 600;
+  border-radius: 3px;
+}
+
 /* ========================================================================== *
  *  COMPATIBILITY BADGES  (relocated here from head-meta.hbs so they adapt)   *
  *  Rendered inline via [.compat.b-both]#…#, .b-adoc, .b-antora.              *

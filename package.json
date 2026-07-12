@@ -11,6 +11,7 @@
   },
   "devDependencies": {
     "@antora/cli": "3.1.x",
+    "@antora/lunr-extension": "^1.0.0-alpha.13",
     "@antora/site-generator": "3.1.x",
     "browser-sync": "3.x",
     "http-server": "14.x",

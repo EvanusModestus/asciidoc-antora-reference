@@ -35,16 +35,21 @@ Each feature is tagged so readers know where it works:
 * *AsciiDoc only* — valid AsciiDoc that Antora changes or restricts (for example, filesystem includes).
 * *Antora only* — provided by the Antora pipeline, not the language (resource IDs, page attributes, nav).
 
+== Themes & search
+
+The site ships *five switchable colour themes* — Rosé Pine Dawn (light), Tokyo Night, Dracula, Nord, and Gruvbox — from a picker in the navbar; the choice persists and a first visit follows your OS light/dark preference. *Full-text search* (client-side, via `@antora/lunr-extension`) spans every page. Both are layered on the stock Antora default UI as a `supplemental-ui` overlay — no UI-bundle fork, no external assets.
+
 == Build & serve
 
-Requires Node.js 16+ and network access on the first build (fetches the Antora default UI).
+Requires Node.js 16+ and network access on the first build (installs dependencies and fetches the Antora default UI).
 
 [source,console]
 ----
 # one-time: Antora reads content from git
 $ git init && git add -A && git commit -m "Initial reference site"
 
-# build
+# install dependencies (the Lunr search extension must resolve), then build
+$ npm install
 $ npx antora --fetch antora-playbook.yml
 
 # serve (xrefs need HTTP; don't open public/index.html from disk)
@@ -53,7 +58,7 @@ $ npx http-server public -c-1 -o
 
 Or use the npm scripts: `npm install` then `npm run build` and `npm run serve`.
 
-Or, if you have `make`: run `make` for the target list, then `make build` and `make serve` — they wrap the same `npx` commands, so no `npm install` is required.
+Or, if you have `make`: run `make` for the target list, then `make build` and `make serve` — `build` installs dependencies on first run, then wraps the same `npx` commands.
 
 == Layout
 
@@ -62,8 +67,9 @@ Or, if you have `make`: run `make` for the target list, then `make build` and `m
 asciidoc-antora-reference/
 ├── antora-playbook.yml          # build configuration
 ├── package.json                 # pinned Antora + serve scripts
-├── supplemental-ui/             # injects badge/role CSS into the UI
-│   └── partials/head-meta.hbs
+├── supplemental-ui/             # theme overlay + search box (no UI-bundle fork)
+│   ├── css/theme.css            # five switchable themes
+│   └── partials/                # head-meta, header-content (navbar + search)
 └── docs/
     ├── antora.yml               # component descriptor + nav registration
     └── modules/

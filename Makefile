@@ -1,8 +1,8 @@
 # Makefile — convenience wrapper for the AsciiDoc + Antora Reference.
 #
-# Zero-install: every target shells out to `npx`, so `make build` works without
-# a prior `npm install`. Targets mirror the package.json scripts so the two
-# interfaces never drift.
+# `make build` installs dependencies on first run (the Lunr search extension
+# must be resolvable), then renders via `npx`. Targets mirror the package.json
+# scripts so the two interfaces never drift.
 #
 #   make          list targets (default)
 #   make build    render the site into public/
@@ -21,7 +21,11 @@ help: ## List available targets
 		/^[a-zA-Z0-9_-]+:.*##/ {printf "  \033[36m%-9s\033[0m %s\n", $$1, $$2} \
 		END {print ""}' $(MAKEFILE_LIST)
 
-build: ## Render the site into public/ (fetches the UI bundle on first run)
+node_modules: package.json ## (internal) install deps when package.json changes
+	npm install
+	@touch node_modules
+
+build: node_modules ## Render the site into public/ (installs deps + fetches the UI bundle on first run)
 	npx antora --fetch $(PLAYBOOK)
 
 serve: build ## Build, then serve public/ over HTTP and open a browser
