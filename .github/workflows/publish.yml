@@ -1,0 +1,54 @@
+name: Publish Antora Site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Least privilege: the deploy job needs pages:write + id-token:write; nothing writes to the repo.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One Pages deploy at a time; a newer push cancels an in-flight run.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Configure Pages
+        id: pages
+        uses: actions/configure-pages@v5
+
+      - name: Install pinned Antora
+        run: npm install
+
+      # --fetch pulls the UI bundle on the clean runner (no antora cache exists yet);
+      # --url sets the site base URL to the project's /<repo>/ Pages subpath so every
+      # generated link resolves — without it, root-relative URLs 404 under a subpath.
+      - name: Build site
+        run: npx antora --fetch --url "${{ steps.pages.outputs.base_url }}" antora-playbook.yml
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./public          # matches antora-playbook.yml -> output.dir
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
