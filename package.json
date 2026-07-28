@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "description": "A la carte reference site demonstrating every AsciiDoc + Antora feature, live-rendered.",
+  "engines": {
+    "node": ">=16"
+  },
   "scripts": {
     "build": "antora --fetch antora-playbook.yml",
     "serve": "http-server public -c-1 -o",

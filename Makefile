@@ -24,8 +24,8 @@ help: ## List available targets
 		/^[a-zA-Z0-9_-]+:.*##/ {printf "  \033[36m%-9s\033[0m %s\n", $$1, $$2} \
 		END {print ""}' $(MAKEFILE_LIST)
 
-node_modules: package.json ## (internal) install deps when package.json changes
-	npm install
+node_modules: package-lock.json ## (internal) install deps from the lockfile when it changes
+	npm ci
 	@touch node_modules
 
 build: node_modules ## Render the site into public/ (installs deps + fetches the UI bundle on first run)
@@ -54,5 +54,5 @@ export: build ## Export a page to DOCX + EPUB into export/ (PDF is built nativel
 clean: ## Remove generated output (public/ and export/)
 	rm -rf $(OUTPUT) export
 
-install: ## Install pinned Antora + http-server locally (optional; npx needs nothing)
-	npm install
+install: ## Install pinned Antora + http-server from the lockfile (optional; npx needs nothing)
+	npm ci
